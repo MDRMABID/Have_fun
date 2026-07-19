@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS HUB — Ultimate Video Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #08080f;
+            --fg: #ffffff;
+            --muted: #8b8b9e;
+            --accent: #6c5ce7;
+            --accent2: #00cec9;
+            --card: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background Effects */
+        .bg-effects {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(108, 92, 231, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(0, 206, 201, 0.1) 0%, transparent 35%),
+                #08080f;
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(8, 8, 15, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        nav a {
+            color: var(--muted);
+            text-decoration: none;
+            margin-left: 25px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover { color: var(--fg); }
+
+        .btn-add {
+            background: linear-gradient(135deg, var(--accent), #a29bfe);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.4);
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 100px 20px 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(36px, 6vw, 64px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--accent2), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            padding: 40px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .video-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.4s ease, border-color 0.4s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .video-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+        }
+
+        .thumbnail-wrapper {
+            position: relative;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+        }
+
+        .thumbnail-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .video-card:hover .thumbnail-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(8, 8, 15, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-card:hover .play-overlay { opacity: 1; }
+
+        .play-btn {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .video-card:hover .play-btn { transform: scale(1.1); }
+
+        .card-info {
+            padding: 18px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+
+        .video-card:hover .delete-btn { opacity: 1; }
+
+        /* Modal (Add Video) */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: #13131c;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 35px;
+            width: 100%;
+            max-width: 550px;
+            position: relative;
+            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-content h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .modal-content p {
+            color: var(--muted);
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px;
+            color: var(--fg);
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .input-group input:focus, .input-group textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-submit:hover { transform: translateY(-2px); }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Theater Mode */
+        .theater-mode {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .theater-mode.active { display: flex; }
+
+        .theater-container {
+            width: 100%;
+            max-width: 1000px;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .video-wrapper {
+            position: relative;
+            aspect-ratio: 16/9;
+            width: 100%;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .theater-details {
+            background: #13131c;
+            padding: 25px;
+            max-height: 30vh;
+            overflow-y: auto;
+        }
+
+        .theater-details h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .theater-close {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: background 0.3s ease;
+        }
+
+        .theater-close:hover { background: rgba(255, 0, 0, 0.5); }
+
+        .comment-section {
+            margin-top: 20px;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        .comment-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--accent2);
+        }
+
+        .comment-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .comment-input input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: var(--fg);
+            outline: none;
+        }
+
+        .comment-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .comment-item strong {
+            color: var(--accent2);
+            font-size: 14px;
+        }
+
+        .comment-item p {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #ddd;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            nav { display: none; }
+            .video-grid { grid-template-columns: 1fr; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-effects"></div>
+
+    <header>
+        <div class="logo">NEXUS HUB</div>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#trending">Trending</a>
+            <a href="#about">About</a>
+        </nav>
+        <button class="btn-add" onclick="openAddModal()">
+            <i class="fa-solid fa-plus"></i> Add Video
+        </button>
+    </header>
+
+    <section class="hero" id="home">
+        <h1>Experience The <span>Ultimate Video</span> Hub</h1>
+        <p>Paste your embed code, hit add, and enjoy a dedicated theater experience for every single video. Seamless, professional, and cinematic.</p>
+        <button class="btn-add" onclick="openAddModal()"><i class="fa-solid fa-upload"></i> Upload Your First Video</button>
+    </section>
+
+    <div class="video-grid" id="videoGrid">
+        <!-- Videos will be injected here by JS -->
+    </div>
+
+    <!-- Add Video Modal -->
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeAddModal()"><i class="fa-solid fa-times"></i></button>
+            <h2>Add New Video</h2>
+            <p>Paste your exact YouTube iframe code below. The system will automatically detect the video and thumbnail.</p>
+            
+            <div class="input-group">
+                <label>YouTube Iframe Code</label>
+                <textarea id="iframeInput" placeholder='<iframe width="560" height="315" src="https://www.youtube.com/embed/WDn9DjEsrcQ?si=..." title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>'></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>Custom Title (Optional)</label>
+                <input type="text" id="titleInput" placeholder="Leave empty to use YouTube default title">
+            </div>
+
+            <button class="btn-submit" onclick="saveVideo()">Add to Library</button>
+        </div>
+    </div>
+
+    <!-- Theater Mode (Video Player Experience) -->
+    <div class="theater-mode" id="theaterMode">
+        <button class="theater-close" onclick="closeTheater()"><i class="fa-solid fa-times"></i></button>
+        <div class="theater-container">
+            <div class="video-wrapper" id="theaterVideoWrapper">
+                <!-- Iframe injected here -->
+            </div>
+            <div class="theater-details">
+                <h2 id="theaterTitle"></h2>
+                <div class="comment-section">
+                    <h3><i class="fa-solid fa-comments"></i> Comments</h3>
+                    <div class="comment-input">
+                        <input type="text" id="commentText" placeholder="Add a public comment...">
+                        <button class="btn-add" onclick="addComment()" style="padding: 10px 15px;"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                    <div id="commentList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Storage Keys
+        const VKEY = 'nexus_videos';
+        const CKEY = 'nexus_comments';
+
+        let videos = [];
+        let currentVideoId = null;
+
+        // Default Starter Video (Using the one provided in the prompt)
+        const DEFAULTS = [
+            {
+                id: 'v1_default',
+                videoId: 'WDn9DjEsrcQ',
+                title: 'Rick Astley - Never Gonna Give You Up (Official Music Video)',
+                src: 'https://www.youtube.com/embed/WDn9DjEsrcQ?si=lYIv9pqn1eoXWfdP'
+            }
+        ];
+
+        // Initialize
+        function init() {
+            const saved = localStorage.getItem(VKEY);
+            if (saved) {
+                videos = JSON.parse(saved);
+            } else {
+                videos = DEFAULTS;
+                saveVideos();
+            }
+            renderVideos();
+        }
+
+        function saveVideos() {
+            localStorage.setItem(VKEY, JSON.stringify(videos));
+        }
+
+        // Render Video Cards
+        function renderVideos() {
+            const grid = document.getElementById('videoGrid');
+            if (videos.length === 0) {
+                grid.innerHTML = `<p style="color: var(--muted); text-align: center; grid-column: 1/-1;">No videos yet. Add your first video!</p>`;
+                return;
+            }
+
+            grid.innerHTML = videos.map(v => `
+                <div class="video-card" onclick="openTheater('${v.id}')">
+                    <button class="delete-btn" onclick="event.stopPropagation(); deleteVideo('${v.id}')">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                    <div class="thumbnail-wrapper">
+                        <img src="https://img.youtube.com/vi/${v.videoId}/hqdefault.jpg" alt="Thumbnail" onerror="this.src='https://via.placeholder.com/320x180/15151e/fff?text=Video+Unavailable'">
+                        <div class="play-overlay">
+                            <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+                        </div>
+                    </div>
+                    <div class="card-info">
+                        <div class="card-title">${v.title}</div>
+                        <div class="card-meta">
+                            <span><i class="fa-solid fa-eye"></i> ${(Math.random() * 100).toFixed(1)}K views</span>
+                            <span><i class="fa-solid fa-clock"></i> Recent</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Modal Controls
+        function openAddModal() {
+            document.getElementById('addModal').classList.add('active');
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').classList.remove('active');
+            document.getElementById('iframeInput').value = '';
+            document.getElementById('titleInput').value = '';
+        }
+
+        // Save Video from pasted Iframe
+        function saveVideo() {
+            const rawIframe = document.getElementById('iframeInput').value.trim();
+            const customTitle = document.getElementById('titleInput').value.trim();
+
+            if (!rawIframe) {
+                alert('Please paste the iframe code!');
+                return;
+            }
+
+            // Extract src and title from iframe
+            try {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = rawIframe;
+                const iframe = tempDiv.querySelector('iframe');
+
+                if (!iframe || !iframe.src) {
+                    alert('Invalid iframe code. Make sure it contains a valid src link.');
+                    return;
+                }
+
+                const src = iframe.src;
+                let videoId = '';
+
+                // Extract Video ID for Thumbnail
+                const match = src.match(/embed\/([a-zA-Z0-9_-]+)/);
+                if (match) {
+                    videoId = match[1];
+                } else {
+                    alert('Could not extract Video ID. Please check the link.');
+                    return;
+                }
+
+                // Determine title
+                let title = customTitle;
+                if (!title) {
+                    title = iframe.title || 'Untitled Video';
+                }
+
+                // Add to array
+                videos.unshift({
+                    id: 'v_' + Date.now(),
+                    videoId: videoId,
+                    title: title,
+                    src: src
+                });
+
+                saveVideos();
+                renderVideos();
+                closeAddModal();
+            } catch (e) {
+                alert('Something went wrong. Please paste valid iframe HTML code.');
+            }
+        }
+
+        // Delete Video
+        function deleteVideo(id) {
+            if (confirm('Remove this video from the hub?')) {
+                videos = videos.filter(v => v.id !== id);
+                saveVideos();
+                renderVideos();
+            }
+        }
+
+        // Theater Mode (Separate Viewing Experience)
+        function openTheater(id) {
+            const video = videos.find(v => v.id === id);
+            if (!video) return;
+
+            currentVideoId = id;
+            
+            // Add autoplay parameter to src
+            let autoplaySrc = video.src;
+            if (!autoplaySrc.includes('autoplay=1')) {
+                autoplaySrc += (autoplaySrc.includes('?') ? '&' : '?') + 'autoplay=1';
+            }
+
+            document.getElementById('theaterVideoWrapper').innerHTML = `
+                <iframe src="${autoplaySrc}" title="${video.title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            `;
+            document.getElementById('theaterTitle').innerText = video.title;
+            
+            renderComments();
+            document.getElementById('theaterMode').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTheater() {
+            document.getElementById('theaterMode').classList.remove('active');
+            document.getElementById('theaterVideoWrapper').innerHTML = ''; // Stop video playback
+            document.body.style.overflow = 'auto';
+            currentVideoId = null;
+        }
+
+        // Comments System
+        function getComments() {
+            return JSON.parse(localStorage.getItem(CKEY)) || {};
+        }
+
+        function saveComments(comments) {
+            localStorage.setItem(CKEY, JSON.stringify(comments));
+        }
+
+        function addComment() {
+            const text = document.getElementById('commentText').value.trim();
+            if (!text || !currentVideoId) return;
+
+            const comments = getComments();
+            if (!comments[currentVideoId]) comments[currentVideoId] = [];
+
+            comments[currentVideoId].push({
+                user: 'Anonymous User',
+                text: text,
+                date: new Date().toLocaleString()
+            });
+
+            saveComments(comments);
+            document.getElementById('commentText').value = '';
+            renderComments();
+        }
+
+        function renderComments() {
+            const comments = getComments();
+            const vidComments = comments[currentVideoId] || [];
+            const list = document.getElementById('commentList');
+
+            if (vidComments.length === 0) {
+                list.innerHTML = `<p style="color:var(--muted); font-size:14px;">No comments yet. Be the first to comment!</p>`;
+                return;
+            }
+
+            list.innerHTML = vidComments.map(c => `
+                <div class="comment-item">
+                    <strong>${c.user}</strong> <span style="font-size:11px; color:var(--muted);">${c.date}</span>
+                    <p>${c.text}</p>
+                </div>
+            `).join('');
+        }
+
+        // Close modal if clicked outside
+        document.getElementById('addModal').addEventListener('click', function(e) {
+            if (e.target === this) closeAddModal();
+        });
+
+        // Initialize App
+        init();
+    </script>
+
+</body>
+</html>
