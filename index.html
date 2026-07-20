@@ -1,4 +1,3 @@
-
 import os
 
 html_code = '''<!DOCTYPE html>
@@ -463,23 +462,27 @@ html_code = '''<!DOCTYPE html>
             <p class="subtitle">Your Ultimate Entertainment Destination</p>
         </div>
 
-<div class="button-container">
-    <button class="fun-button btn-stories"
-        onclick="window.open('https://mdrmabid.github.io/Have_fun/stories.html', '_blank')">
-        <span class="button-icon">📚</span>
-        <span>Stories</span>
-    </button>
+        <div class="button-container">
+            <!-- Stories Button (Same Tab) -->
+            <button class="fun-button btn-stories"
+                onclick="window.location.href='https://mdrmabid.github.io/Have_fun/stories.html'">
+                <span class="button-icon">📚</span>
+                <span>Stories</span>
+            </button>
 
-    <button class="fun-button btn-games" onclick="handleClick(this, 'games')">
-        <span class="button-icon">🎯</span>
-        <span>Games</span>
-    </button>
+            <button class="fun-button btn-games" onclick="handleClick(this, 'games')">
+                <span class="button-icon">🎯</span>
+                <span>Games</span>
+            </button>
 
-    <button class="fun-button btn-videos" onclick="handleClick(this, 'videos')">
-        <span class="button-icon">😂</span>
-        <span>Funny Videos</span>
-    </button>
-</div>
+            <!-- Funny Videos Button (Same Tab) -->
+            <button class="fun-button btn-videos" 
+                onclick="window.location.href='https://mdrmabid.github.io/Have_fun/funny_videos2.html'">
+                <span class="button-icon">😂</span>
+                <span>Funny Videos</span>
+            </button>
+        </div>
+    </div>
 
     <script>
         // Create particles
