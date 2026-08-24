@@ -1,573 +1,972 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fun Zone - Your Ultimate Entertainment Hub</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laugh Zone 🎪 - Your Daily Dose of Joy</title>
+  
+  <!-- Playful Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
-            background: #0a0a0a;
-            position: relative;
-        }
+  <style>
+    /* ==========================================================================
+       CSS VARIABLES & THEME SETUP
+       ========================================================================== */
+    :root {
+      --bg-gradient: linear-gradient(135deg, #FFF6B7 0%, #FEE140 25%, #FA709A 75%, #FEE140 100%);
+      --primary-yellow: #FFD200;
+      --primary-orange: #FF5E36;
+      --bubble-pink: #FF3366;
+      --electric-purple: #8A2387;
+      --neon-green: #00E676;
+      --card-bg: #FFFFFF;
+      --text-dark: #1F1B24;
+      --text-muted: #5A5364;
+      --border-color: #1F1B24;
+      
+      --font-display: 'Fredoka', 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+      --font-body: 'Quicksand', -apple-system, BlinkMacSystemFont, sans-serif;
+      
+      --neo-shadow: 6px 6px 0px var(--border-color);
+      --neo-shadow-hover: 10px 10px 0px var(--border-color);
+      --neo-shadow-active: 2px 2px 0px var(--border-color);
+      --radius-large: 28px;
+      --radius-small: 16px;
 
-        /* Animated Background */
-        .background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            background: linear-gradient(45deg, 
-                #0f0c29, #302b63, #24243e, #0f0c29);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-        }
+      /* Funny Custom Cursors (Banana for Default, Laughing Emoji for Pointer) */
+      --cursor-default: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'><text y='28' font-size='28'>🍌</text></svg>") 4 4, auto;
+      --cursor-pointer: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 36 36'><text y='28' font-size='30'>🤣</text></svg>") 16 16, pointer;
+    }
 
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
+    /* ==========================================================================
+       GLOBAL STYLES & RESET
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      cursor: var(--cursor-default);
+      user-select: none;
+      -webkit-user-select: none;
+    }
 
-        /* Particle System */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
+    body {
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      background-size: 300% 300%;
+      animation: gradientShift 15s ease infinite;
+      font-family: var(--font-body);
+      color: var(--text-dark);
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
 
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: floatUp linear infinite;
-        }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
-        @keyframes floatUp {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-100px) rotate(720deg);
-                opacity: 0;
-            }
-        }
+    a, button, select, .action-card, .clickable {
+      cursor: var(--cursor-pointer) !important;
+    }
 
-        /* Grid Pattern */
-        .grid-pattern {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: gridMove 20s linear infinite;
-        }
+    /* RTL Support for Afghan languages */
+    [dir="rtl"] {
+      direction: rtl;
+      font-family: 'Fredoka', Tahoma, sans-serif;
+    }
 
-        @keyframes gridMove {
-            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
-            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
-        }
+    /* ==========================================================================
+       TOP BAR & STICKY LANGUAGE TRANSLATOR
+       ========================================================================== */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.4);
+      border-bottom: 3px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        /* Glowing Orbs */
-        .orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.3;
-            animation: orbFloat 20s ease-in-out infinite;
-            z-index: -1;
-        }
+    .brand-pill {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      background: #FFF;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 3px solid var(--border-color);
+      box-shadow: 3px 3px 0 var(--border-color);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-        .orb1 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, #ff006e, transparent);
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s;
-        }
+    .lang-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-        .orb2 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, #8338ec, transparent);
-            top: 60%;
-            right: 10%;
-            animation-delay: -5s;
-        }
+    .lang-label {
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: none;
+    }
 
-        .orb3 {
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, #3a86ff, transparent);
-            bottom: 10%;
-            left: 30%;
-            animation-delay: -10s;
-        }
+    @media (min-width: 600px) {
+      .lang-label { display: inline-block; }
+    }
 
-        @keyframes orbFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(50px, -50px) scale(1.1); }
-            50% { transform: translate(-30px, 30px) scale(0.9); }
-            75% { transform: translate(40px, 40px) scale(1.05); }
-        }
+    .lang-dropdown {
+      appearance: none;
+      -webkit-appearance: none;
+      background: #FFF url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%231F1B24' viewBox='0 0 16 16'><path d='M8 11.5l-5-5h10l-5 5z'/></svg>") no-repeat right 14px center;
+      padding: 8px 36px 8px 16px;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      border: 3px solid var(--border-color);
+      border-radius: 999px;
+      box-shadow: var(--neo-shadow);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      color: var(--text-dark);
+      outline: none;
+    }
 
-        /* Main Container */
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 2rem;
-            position: relative;
-            z-index: 1;
-        }
+    .lang-dropdown:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: var(--neo-shadow-hover);
+    }
 
-        /* Title Section */
-        .title-section {
-            text-align: center;
-            margin-bottom: 4rem;
-            animation: fadeInDown 1s ease-out;
-        }
+    .lang-dropdown:active {
+      transform: translate(2px, 2px);
+      box-shadow: var(--neo-shadow-active);
+    }
 
-        .main-title {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 900;
-            background: linear-gradient(135deg, #ff006e, #8338ec, #3a86ff, #06d6a0);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: titleGlow 3s ease-in-out infinite, titlePulse 2s ease-in-out infinite;
-            text-shadow: 0 0 30px rgba(255, 0, 110, 0.5);
-            letter-spacing: 0.1em;
-            margin-bottom: 1rem;
-        }
+    /* ==========================================================================
+       HERO & ANIMATED HEADER
+       ========================================================================== */
+    .hero {
+      text-align: center;
+      padding: 48px 20px 24px;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
 
-        @keyframes titleGlow {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
+    .badge-pill {
+      display: inline-block;
+      background: var(--primary-orange);
+      color: #FFF;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 6px 18px;
+      border-radius: 50px;
+      border: 3px solid var(--border-color);
+      box-shadow: var(--neo-shadow);
+      margin-bottom: 18px;
+      animation: wobble 3s ease-in-out infinite;
+    }
 
-        @keyframes titlePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
+    @keyframes wobble {
+      0%, 100% { transform: rotate(-2deg); }
+      50% { transform: rotate(2deg); }
+    }
 
-        .subtitle {
-            font-size: clamp(1rem, 2.5vw, 1.5rem);
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 300;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            animation: fadeInUp 1s ease-out 0.3s both;
-        }
+    .main-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 7vw, 4.8rem);
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.1;
+      text-shadow: 4px 4px 0px #FFF, 8px 8px 0px var(--bubble-pink);
+      margin-bottom: 16px;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
 
-        /* Button Container */
-        .button-container {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            max-width: 1200px;
-            animation: fadeInUp 1s ease-out 0.6s both;
-        }
+    .main-title:hover {
+      transform: scale(1.03) rotate(-1deg);
+    }
 
-        /* Futuristic Buttons */
-        .fun-button {
-            position: relative;
-            padding: 2rem 3rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            min-width: 280px;
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.3),
-                inset 0 0 20px rgba(255, 255, 255, 0.1);
-        }
+    .main-subtitle {
+      font-size: clamp(1.1rem, 2.8vw, 1.45rem);
+      font-weight: 700;
+      color: #2F2A38;
+      max-width: 650px;
+      margin: 0 auto;
+      line-height: 1.4;
+      background: rgba(255, 255, 255, 0.65);
+      padding: 10px 20px;
+      border-radius: var(--radius-small);
+      border: 2px dashed var(--border-color);
+    }
 
-        .fun-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.3), 
-                transparent);
-            transition: left 0.5s;
-        }
+    /* ==========================================================================
+       ACTION CARDS SECTION
+       ========================================================================== */
+    .cards-section {
+      max-width: 1200px;
+      margin: 30px auto 60px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 32px;
+      width: 100%;
+    }
 
-        .fun-button:hover::before {
-            left: 100%;
-        }
+    .action-card {
+      background: var(--card-bg);
+      border: 4px solid var(--border-color);
+      border-radius: var(--radius-large);
+      box-shadow: var(--neo-shadow);
+      padding: 36px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
+    }
 
-        .fun-button:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.4),
-                0 0 40px var(--glow-color),
-                inset 0 0 30px rgba(255, 255, 255, 0.2);
-        }
+    .action-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: var(--neo-shadow-hover);
+    }
 
-        .fun-button:active {
-            transform: translateY(-5px) scale(1.02);
-        }
+    .action-card:active {
+      transform: translateY(2px);
+      box-shadow: var(--neo-shadow-active);
+    }
 
-        /* Stories Button */
-        .btn-stories {
-            --glow-color: rgba(255, 0, 110, 0.6);
-            border: 2px solid rgba(255, 0, 110, 0.5);
-        }
+    .card-icon-wrap {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.2rem;
+      margin-bottom: 20px;
+      box-shadow: 4px 4px 0 var(--border-color);
+      transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
 
-        .btn-stories:hover {
-            background: linear-gradient(135deg, rgba(255, 0, 110, 0.3), rgba(255, 0, 110, 0.1));
-        }
+    .action-card:hover .card-icon-wrap {
+      transform: rotate(15deg) scale(1.15);
+    }
 
-        /* Games Button */
-        .btn-games {
-            --glow-color: rgba(131, 56, 236, 0.6);
-            border: 2px solid rgba(131, 56, 236, 0.5);
-        }
+    /* Specific Card Accents */
+    .card-stories { background: #FFF9E6; }
+    .card-stories .card-icon-wrap { background: #FFE066; }
+    
+    .card-jokes { background: #EBFBFF; }
+    .card-jokes .card-icon-wrap { background: #74C0FC; }
 
-        .btn-games:hover {
-            background: linear-gradient(135deg, rgba(131, 56, 236, 0.3), rgba(131, 56, 236, 0.1));
-        }
+    .card-videos { background: #FFF0F6; }
+    .card-videos .card-icon-wrap { background: #FF85A2; }
 
-        /* Funny Videos Button */
-        .btn-videos {
-            --glow-color: rgba(6, 214, 160, 0.6);
-            border: 2px solid rgba(6, 214, 160, 0.5);
-        }
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-dark);
+    }
 
-        .btn-videos:hover {
-            background: linear-gradient(135deg, rgba(6, 214, 160, 0.3), rgba(6, 214, 160, 0.1));
-        }
+    .card-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 28px;
+      flex-grow: 1;
+    }
 
-        /* Button Icons */
-        .button-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: block;
-            animation: iconBounce 2s ease-in-out infinite;
-        }
+    .card-btn {
+      width: 100%;
+      padding: 14px 20px;
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      border-radius: 999px;
+      border: 3px solid var(--border-color);
+      color: #FFF;
+      box-shadow: 4px 4px 0 var(--border-color);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
 
-        @keyframes iconBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+    .card-stories .card-btn { background: var(--primary-orange); }
+    .card-jokes .card-btn { background: var(--electric-purple); }
+    .card-videos .card-btn { background: var(--bubble-pink); }
 
-        /* Ripple Effect */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.6);
-            transform: scale(0);
-            animation: rippleEffect 0.6s ease-out;
-            pointer-events: none;
-        }
+    .action-card:hover .card-btn {
+      box-shadow: 6px 6px 0 var(--border-color);
+    }
 
-        @keyframes rippleEffect {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
+    /* ==========================================================================
+       INTERACTIVE MODAL / PREVIEW DRAWER
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
 
-        /* Floating Elements */
-        .floating-shapes {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
-        .shape {
-            position: absolute;
-            opacity: 0.1;
-            animation: floatShape 15s ease-in-out infinite;
-        }
+    .modal-card {
+      background: #FFF;
+      border: 4px solid var(--border-color);
+      border-radius: var(--radius-large);
+      box-shadow: 12px 12px 0 var(--border-color);
+      width: 100%;
+      max-width: 620px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: scale(0.9) translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
 
-        .shape1 {
-            width: 100px;
-            height: 100px;
-            border: 3px solid #ff006e;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
+    .modal-overlay.active .modal-card {
+      transform: scale(1) translateY(0);
+    }
 
-        .shape2 {
-            width: 80px;
-            height: 80px;
-            background: #8338ec;
-            border-radius: 50%;
-            top: 60%;
-            right: 15%;
-            animation-delay: -3s;
-        }
+    .modal-header {
+      padding: 20px 24px;
+      background: var(--primary-yellow);
+      border-bottom: 3px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-        .shape3 {
-            width: 120px;
-            height: 120px;
-            border: 3px solid #3a86ff;
-            bottom: 20%;
-            left: 20%;
-            animation-delay: -6s;
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-        }
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
 
-        @keyframes floatShape {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(30px, -30px) rotate(90deg); }
-            50% { transform: translate(-20px, 20px) rotate(180deg); }
-            75% { transform: translate(40px, 10px) rotate(270deg); }
-        }
+    .modal-close {
+      background: #FFF;
+      border: 3px solid var(--border-color);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 2px 2px 0 var(--border-color);
+      transition: transform 0.1s ease;
+    }
 
-        /* Animations */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .modal-close:hover {
+      transform: scale(1.1);
+    }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .button-container {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 3px solid var(--border-color);
+      background: #F8F9FA;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
 
-            .fun-button {
-                min-width: 250px;
-                padding: 1.5rem 2rem;
-            }
-        }
+    .modal-action-btn {
+      padding: 10px 20px;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 999px;
+      border: 3px solid var(--border-color);
+      background: var(--neon-green);
+      box-shadow: 3px 3px 0 var(--border-color);
+    }
 
-        /* Loading Animation */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #0a0a0a;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s, visibility 0.5s;
-        }
+    /* ==========================================================================
+       CONFETTI CANVAS & FLOATING BACKGROUND DECOR
+       ========================================================================== */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+    }
 
-        .loading-overlay.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
+    .floating-emoji {
+      position: absolute;
+      pointer-events: none;
+      font-size: 2.2rem;
+      opacity: 0.25;
+      animation: floatAround 18s ease-in-out infinite;
+      z-index: 0;
+    }
 
-        .loader {
-            width: 80px;
-            height: 80px;
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-top-color: #ff006e;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+    @keyframes floatAround {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-40px) rotate(20deg); }
+    }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-    </style>
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    footer {
+      text-align: center;
+      padding: 24px 16px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      background: rgba(255, 255, 255, 0.4);
+      border-top: 3px solid var(--border-color);
+      z-index: 10;
+    }
+  </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loader"></div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Ambient Floating Background Emojis -->
+  <span class="floating-emoji" style="top: 15%; left: 8%;">🍿</span>
+  <span class="floating-emoji" style="top: 25%; right: 10%; animation-delay: 2s;">🎈</span>
+  <span class="floating-emoji" style="bottom: 20%; left: 12%; animation-delay: 4s;">🍕</span>
+  <span class="floating-emoji" style="bottom: 15%; right: 8%; animation-delay: 1s;">🎉</span>
+
+  <!-- Sticky Top Navigation -->
+  <header class="top-bar">
+    <div class="brand-pill clickable" onclick="LaughZoneApp.triggerCheer()">
+      <span>🤡</span> Laugh Zone
     </div>
-
-    <!-- Background Elements -->
-    <div class="background"></div>
-    <div class="grid-pattern"></div>
-    <div class="particles" id="particles"></div>
-    <div class="orb orb1"></div>
-    <div class="orb orb2"></div>
-    <div class="orb orb3"></div>
-    <div class="floating-shapes">
-        <div class="shape shape1"></div>
-        <div class="shape shape2"></div>
-        <div class="shape shape3"></div>
+    
+    <div class="lang-container">
+      <label for="languageSelect" class="lang-label">🌐 Language:</label>
+      <select id="languageSelect" class="lang-dropdown clickable" aria-label="Select Language">
+        <option value="en">🇺🇸 English</option>
+        <option value="bn">🇧🇩 বাংলা (Bangla)</option>
+        <option value="es">🇪🇸 Español (Spanish)</option>
+        <option value="pt">🇧🇷 Português (Portuguese)</option>
+        <option value="ps">🇦🇫 پښتو / دری (Afghan)</option>
+      </select>
     </div>
+  </header>
 
-    <!-- Main Content -->
-    <div class="container">
-        <div class="title-section">
-            <h1 class="main-title">FUN ZONE</h1>
-            <p class="subtitle">Your Ultimate Entertainment Destination</p>
-        </div>
+  <!-- Hero Section -->
+  <main>
+    <section class="hero">
+      <div class="badge-pill" data-i18n="badgeText">🔥 Warning: Highly Contagious Laughter!</div>
+      <h1 class="main-title" data-i18n="mainTitle">Welcome to Laugh Zone 🎪</h1>
+      <p class="main-subtitle" data-i18n="mainSubtitle">
+        Your daily prescription of goofy stories, rib-tickling jokes, and hilarious clips!
+      </p>
+    </section>
 
-        <div class="button-container">
-            <!-- Stories Button (Same Tab) -->
-            <button class="fun-button btn-stories"
-                onclick="window.location.href='https://mdrmabid.github.io/Have_fun/stories.html'">
-                <span class="button-icon">📚</span>
-                <span>Stories</span>
-            </button>
+    <!-- Action Cards Grid -->
+    <section class="cards-section">
+      
+      <!-- Card 1: Stories -->
+      <article class="action-card card-stories clickable" onclick="LaughZoneApp.openModal('stories')">
+        <div class="card-icon-wrap">📖</div>
+        <h2 class="card-title" data-i18n="storiesTitle">Funny Stories</h2>
+        <p class="card-desc" data-i18n="storiesDesc">Wild, real, and awkwardly hilarious tales that will make you spit your drink.</p>
+        <button class="card-btn" data-i18n="storiesBtn">Read Stories 📖</button>
+      </article>
 
-            <button class="fun-button btn-games" onclick="handleClick(this, 'games')">
-                <span class="button-icon">🎯</span>
-                <span>Games</span>
-            </button>
+      <!-- Card 2: Jokes -->
+      <article class="action-card card-jokes clickable" onclick="LaughZoneApp.openModal('jokes')">
+        <div class="card-icon-wrap">🤣</div>
+        <h2 class="card-title" data-i18n="jokesTitle">Punchy Jokes</h2>
+        <p class="card-desc" data-i18n="jokesDesc">Quick one-liners, clever dad jokes, and puns that hit right in the funny bone.</p>
+        <button class="card-btn" data-i18n="jokesBtn">Crack a Joke 🤣</button>
+      </article>
 
-            <!-- Funny Videos Button (Same Tab) -->
-            <button class="fun-button btn-videos" 
-                onclick="window.location.href='https://mdrmabid.github.io/Have_fun/funny_videos2.html'">
-                <span class="button-icon">😂</span>
-                <span>Funny Videos</span>
-            </button>
-        </div>
+      <!-- Card 3: Videos -->
+      <article class="action-card card-videos clickable" onclick="LaughZoneApp.openModal('videos')">
+        <div class="card-icon-wrap">🎬</div>
+        <h2 class="card-title" data-i18n="videosTitle">Funny Videos</h2>
+        <p class="card-desc" data-i18n="videosDesc">Epic animal bloopers, instant karma fails, and non-stop giggle reels on loop.</p>
+        <button class="card-btn" data-i18n="videosBtn">Watch Clips 🎬</button>
+      </article>
+
+    </section>
+  </main>
+
+  <!-- Interactive Dynamic Modal -->
+  <div id="laughModal" class="modal-overlay clickable" onclick="LaughZoneApp.closeModalOnBackdrop(event)">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle" class="modal-title">Category</h3>
+        <button class="modal-close clickable" onclick="LaughZoneApp.closeModal()">✕</button>
+      </div>
+      <div id="modalBody" class="modal-body">
+        <!-- Content dynamically injected here -->
+      </div>
+      <div class="modal-footer">
+        <button id="modalNextBtn" class="modal-action-btn clickable" onclick="LaughZoneApp.nextItem()">Give Me Another! 🚀</button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // Create particles
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 50;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                
-                const size = Math.random() * 10 + 5;
-                const left = Math.random() * 100;
-                const duration = Math.random() * 10 + 10;
-                const delay = Math.random() * 10;
-                
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${left}%`;
-                particle.style.animationDuration = `${duration}s`;
-                particle.style.animationDelay = `${delay}s`;
-                
-                // Random colors
-                const colors = ['#ff006e', '#8338ec', '#3a86ff', '#06d6a0', '#ffbe0b'];
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                particle.style.background = `radial-gradient(circle, ${color}, transparent)`;
-                
-                particlesContainer.appendChild(particle);
-            }
+  <!-- Footer -->
+  <footer>
+    <p data-i18n="footerText">🎪 Made with pure joy for gigglers worldwide. Laugh everyday!</p>
+  </footer>
+
+  <!-- ==========================================================================
+       JAVASCRIPT: I18N, MODALS, SOUND FX, AND EXTENSIBLE API MODULE
+       ========================================================================== -->
+  <script>
+    /**
+     * MULTI-LANGUAGE DICTIONARY (5 Languages)
+     */
+    const TRANSLATIONS = {
+      en: {
+        badgeText: "🔥 Warning: Highly Contagious Laughter!",
+        mainTitle: "Welcome to Laugh Zone 🎪",
+        mainSubtitle: "Your daily prescription of goofy stories, rib-tickling jokes, and hilarious clips!",
+        storiesTitle: "Funny Stories",
+        storiesDesc: "Wild, real, and awkwardly hilarious tales that will make you spit your drink.",
+        storiesBtn: "Read Stories 📖",
+        jokesTitle: "Punchy Jokes",
+        jokesDesc: "Quick one-liners, clever dad jokes, and puns that hit right in the funny bone.",
+        jokesBtn: "Crack a Joke 🤣",
+        videosTitle: "Funny Videos",
+        videosDesc: "Epic animal bloopers, instant karma fails, and non-stop giggle reels on loop.",
+        videosBtn: "Watch Clips 🎬",
+        footerText: "🎪 Made with pure joy for gigglers worldwide. Laugh everyday!",
+        nextBtn: "Give Me Another! 🚀",
+        stories: [
+          "I waved back enthusiastically at someone across the street for 2 whole minutes before realizing they were waving at the dog behind me. We are now legally strangers forever.",
+          "My smart vacuum cleaner escaped through the front door and was found 3 houses down trying to vacuum a neighbor's driveway.",
+          "I joined a Zoom meeting with my camera on while brushing my teeth wearing a dinosaur costume. My boss just stared and said: 'Good morning, T-Rex.'"
+        ],
+        jokes: [
+          "Why don't scientists trust atoms? Because they make up everything! ⚛️",
+          "Parallel lines have so much in common... it's a shame they'll never meet! 📏",
+          "Why did the scarecrow win an award? Because he was outstanding in his field! 🌾"
+        ],
+        videos: [
+          "🐱 Video Feed Ready: 'Cat attempts 10-foot jump onto kitchen counter and fails in slow motion.'",
+          "🐶 Video Feed Ready: 'Golden retriever gets startled by its own hiccup.'",
+          "🦜 Video Feed Ready: 'Parrot mimics smoke alarm every time owner burns toast.'"
+        ]
+      },
+      bn: {
+        badgeText: "🔥 সতর্কতা: অনিয়ন্ত্রিত হাসির প্রবল সম্ভাবনা!",
+        mainTitle: "লাফ জোনে স্বাগতম 🎪",
+        mainSubtitle: "আপনার প্রতিদিনের হাসিখুশি গল্প, পেটে খিল ধরা কৌতুক আর মজার ভিডিওর রাজ্য!",
+        storiesTitle: "মজার গল্প",
+        storiesDesc: "অদ্ভুত আর কাণ্ডজ্ঞানহীন সব বাস্তব ঘটনা যা শুনলে পেটের ভাত চাল হয়ে যাবে।",
+        storiesBtn: "গল্প পড়ুন 📖",
+        jokesTitle: "দম ফাটানো জোকস",
+        jokesDesc: "সেরা সব হাসির কৌতুক আর পাঞ্চলাইন যা আপনার মন ভালো করে দেবে তৎক্ষণাৎ।",
+        jokesBtn: "জোকস শুনুন 🤣",
+        videosTitle: "মজার ভিডিও",
+        videosDesc: "পশুপাখির ফানি কাণ্ড আর সেরা সব হাসির ক্লিপের বিনোদন মেলা।",
+        videosBtn: "ভিডিও দেখুন 🎬",
+        footerText: "🎪 পৃথিবীব্যাপী হাসিমুখ ছড়িয়ে দিতে তৈরি। প্রতিদিন প্রাণখুলে হাসুন!",
+        nextBtn: "আরেকটি দেখাও! 🚀",
+        stories: [
+          "একবার রাস্তায় একজনকে হাত নাড়তে দেখে আমিও খুব ভাব নিয়ে ২ মিনিট হাত নাড়লাম। পরে দেখি সে আমার পেছনের বিড়ালটাকে ডাকছিল!",
+          "আমার রোবট ভ্যাকুয়াম ক্লিনার দরজা খোলা পেয়ে পালিয়ে গিয়ে পাশের বাড়ির উঠোন পরিষ্কার করছিল!",
+          "ঘুমের ঘোরে জুমে মিটিং অন করে টুথব্রাশ করতে করতে বসের সামনে চলে এসেছিলাম। বস বললেন, 'মিটিং পরে, আগে দাঁত মাজো!'"
+        ],
+        jokes: [
+          "শিক্ষক: বলতো পৃথিবী কেন ঘোরে?\nছাত্র: স্যার, আপনি যা পড়াচ্ছেন তাতে তো পৃথিবীরও মাথা ঘুরছে! 🌍",
+          "ডাক্তার: আপনার চোখের সমস্যা, চশমা লাগবে।\nরোগী: ডাক্তারবাবু, চশমা পরলে আমি পড়তে পারব তো? আমি কিন্তু অশিক্ষিত! 🤓",
+          "বল্টু: দোস্ত, পরীক্ষা কেমন হলো?\nমন্টু: একদম পানির মতো সহজ!\nবল্টু: তাহলে লিখেছিস কত?\nমন্টু: সাতার জানতাম না তো, তাই ডুবে গেলাম! 🌊"
+        ],
+        videos: [
+          "🐱 ভিডিও রেডি: বিড়ালটি সোফায় লাফ দিতে গিয়ে পিছলে পড়ে গেল স্লো-মোশনে!",
+          "🐶 ভিডিও রেডি: নিজের লেজ তাড়া করতে গিয়ে গোল গোল ঘুরছে মিষ্টি কুকুরছানা।",
+          "🦜 ভিডিও রেডি: কাজের সময় টিয়া পাখি এসে কীবোর্ডে নাচানাচি শুরু করল!"
+        ]
+      },
+      es: {
+        badgeText: "🔥 ¡Advertencia: Risas incontrolables!",
+        mainTitle: "Bienvenido a Laugh Zone 🎪",
+        mainSubtitle: "¡Tu receta diaria de anécdotas locas, chistes geniales y videos divertidísimos!",
+        storiesTitle: "Historias Graciosas",
+        storiesDesc: "Relatos reales e incómodos que te harán reír a carcajadas hasta escupir el café.",
+        storiesBtn: "Leer Historias 📖",
+        jokesTitle: "Chistes Buenísimos",
+        jokesDesc: "Chistes cortos, ocurrencias y remates perfectos para alegrarte el día.",
+        jokesBtn: "Contar un Chiste 🤣",
+        videosTitle: "Videos Divertidos",
+        videosDesc: "Caídas épicas, mascotas traviesas y momentos virales garantizados.",
+        videosBtn: "Ver Videos 🎬",
+        footerText: "🎪 Hecho con pura alegría para hacer sonreír al mundo entero.",
+        nextBtn: "¡Dame otro! 🚀",
+        stories: [
+          "Saludé con entusiasmo a alguien en la calle durante 2 minutos hasta notar que saludaba al perro detrás de mí.",
+          "Mi aspiradora robot se escapó por la puerta y la encontramos en casa del vecino limpiándole la entrada.",
+          "Entré a una videollamada de trabajo en pijama de dinosaurio cepillándome los dientes. Mi jefe solo dijo: 'Buenos días, Dino'."
+        ],
+        jokes: [
+          "¿Qué le dice una impresora a otra? — ¿Esa hoja es tuya o es una impresión mía? 🖨️",
+          "¿Por qué los pájaros no usan Facebook? ¡Porque ya tienen Twitter! 🐦",
+          "¿Cómo se llama el campeón de buceo japonés? — Tokofondo. 🌊"
+        ],
+        videos: [
+          "🐱 Video Listo: Gato intenta saltar a la mesa y resbala en cámara lenta.",
+          "🐶 Video Listo: Perro que se asusta con su propio reflejo en el espejo.",
+          "🦜 Video Listo: Loro que canta ópera cada vez que tocan el timbre."
+        ]
+      },
+      pt: {
+        badgeText: "🔥 Aviso: Alto risco de gargalhadas!",
+        mainTitle: "Bem-vindo ao Laugh Zone 🎪",
+        mainSubtitle: "Sua dose diária de histórias malucas, piadas hilárias e vídeos engraçados!",
+        storiesTitle: "Histórias Engraçadas",
+        storiesDesc: "Micos reais e momentos constrangedores que vão te fazer chorar de rir.",
+        storiesBtn: "Ler Histórias 📖",
+        jokesTitle: "Piadas Boas",
+        jokesDesc: "Trocadilhos afiados e tiradas rápidas para alegrar seu dia em segundos.",
+        jokesBtn: "Ver Piadas 🤣",
+        videosTitle: "Vídeos Hilários",
+        videosDesc: "Os melhores tombos, trapalhadas de animais e risadas garantidas.",
+        videosBtn: "Assistir Vídeos 🎬",
+        footerText: "🎪 Feito com alegria para espalhar sorrisos pelo mundo!",
+        nextBtn: "Manda outra! 🚀",
+        stories: [
+          "Fiquei acenando para uma pessoa na rua por 2 minutos até perceber que ela estava chamando o cachorro atrás de mim.",
+          "Meu aspirador robô fugiu pelo portão e foi encontrado varrendo a calçada do vizinho.",
+          "Liguei a câmera na reunião de trabalho escovando os dentes com pijama de unicórnio. Meu chefe só riu."
+        ],
+        jokes: [
+          "Por que o livro de matemática se suicidou? — Porque tinha muitos problemas! 📐",
+          "O que o pato falou para a pata? — Vem Quá! 🦆",
+          "Qual é o café favorito dos desenvolvedores? — Java! ☕"
+        ],
+        videos: [
+          "🐱 Vídeo Pronto: Gato tenta caçar o laser e cai na caixa de papelão.",
+          "🐶 Vídeo Pronto: Cachorro correndo de costas ao ver um limão.",
+          "🦜 Vídeo Pronto: Papagaio dançando samba no ventilador desligado."
+        ]
+      },
+      ps: {
+        badgeText: "🔥 خبرداری: دلته بې حده خندا او خوشحالي ده!",
+        mainTitle: "د خندا زون (Laugh Zone) ته ښه راغلاست 🎪",
+        mainSubtitle: "ستاسو د خندا او خوښۍ لپاره په زړه پورې خندونکې کیسې، ټوکې او ویډیوګانې!",
+        storiesTitle: "خندونکې کیسې",
+        storiesDesc: "عجیبه او خندوونکې پېښې چې ستاسو پر شونډو به ډاډمنه موسکا راولي.",
+        storiesBtn: "کیسې ولولئ 📖",
+        jokesTitle: "خوږې ټوکې",
+        jokesDesc: "غوره او تازه ټوکې او مسخره خبرې د زړه د خوښۍ لپاره.",
+        jokesBtn: "ټوکې وګورئ 🤣",
+        videosTitle: "خندونکې ویډیوګانې",
+        videosDesc: "د حیواناتو او خلکو په زړه پورې او خندونکې صحنې او لنډې ویډیوګانې.",
+        videosBtn: "ویډیو وګورئ 🎬",
+        footerText: "🎪 په نړۍ کې د خندا او خوشحالۍ خپرولو لپاره. تل موسکي اوسئ!",
+        nextBtn: "بله راوړه! 🚀",
+        stories: [
+          "ما په لاره کې یو کس ته ۲ دقیقې لاس خوځاوه، وروسته پوه شوم چې هغه زما شاته سپي ته لاس خوځاوه!",
+          "زموږ د کور د پاکولو کوچنی اتومات ماشین له کوره وتلی و او د ګاونډي د دروازې مخه یې پاکوله!",
+          "د سهار په آنلاین کاري غونډه کې مې کمېره خلاصه وه او غاښونه مې پاکول، رییس راته وویل: لومړی غاښونه ووینځه!"
+        ],
+        jokes: [
+          "ښوونکی: ولې ناوخته راغلې؟\nشاګرد: استاد، د خوب تعبیر مې لیده چې څنګه ستا صنف ته پر وخت راشم! 😂",
+          "ډاکټر: دا درمل په خوب کې خوره.\nناروغ: ډاکټر صیب، بیا خو باید لومړی راویښ شم! 💊",
+          "یو کس وویل: زه ډېر هوښیار یم، ۵ میاشتې کې مې د ۳ کلونو ماشومانو معما خلاصه کړه! 🧩"
+        ],
+        videos: [
+          "🐱 ویډیو چمتو ده: پېشو چې په ورو حرکت (Slow-motion) کې له مېز څخه ښکته لوېږي.",
+          "🐶 ویډیو چمتو ده: سپی چې په خپله لکۍ پسې راڅرخي.",
+          "🦜 ویډیو چمتو ده: طوطي چې د زنګ له غږ سره نڅا کوي."
+        ]
+      }
+    };
+
+    /**
+     * SOUND SYNTHESIZER (Web Audio API - No external mp3 files required)
+     */
+    class SoundFX {
+      constructor() {
+        this.ctx = null;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+      }
+      playBoing() {
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        osc.type = 'sine';
+        const now = this.ctx.currentTime;
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(600, now + 0.15);
+        osc.frequency.exponentialRampToValueAtTime(300, now + 0.3);
+
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+
+        osc.start(now);
+        osc.stop(now + 0.35);
+      }
+      playCheer() {
+        this.init();
+        if (!this.ctx) return;
+        [440, 554.37, 659.25, 880].forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.type = 'triangle';
+          const now = this.ctx.currentTime + (i * 0.08);
+          osc.frequency.setValueAtTime(freq, now);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+          osc.start(now);
+          osc.stop(now + 0.4);
+        });
+      }
+    }
+
+    /**
+     * CONFETTI ENGINE (Pure Canvas)
+     */
+    class ConfettiEngine {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.animationId = null;
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+      }
+      resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+      burst(x = window.innerWidth / 2, y = window.innerHeight / 2) {
+        const colors = ['#FFD200', '#FF3366', '#00E676', '#00C2FF', '#8A2387', '#FF5E36'];
+        for (let i = 0; i < 40; i++) {
+          this.particles.push({
+            x: x,
+            y: y,
+            size: Math.random() * 8 + 6,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            vx: (Math.random() - 0.5) * 16,
+            vy: (Math.random() - 0.7) * 16,
+            gravity: 0.45,
+            rotation: Math.random() * 360,
+            rotSpeed: (Math.random() - 0.5) * 12,
+            life: 1
+          });
+        }
+        if (!this.animationId) this.animate();
+      }
+      animate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += p.gravity;
+          p.rotation += p.rotSpeed;
+          p.life -= 0.015;
+
+          if (p.life <= 0) {
+            this.particles.splice(i, 1);
+            continue;
+          }
+
+          this.ctx.save();
+          this.ctx.translate(p.x, p.y);
+          this.ctx.rotate((p.rotation * Math.PI) / 180);
+          this.ctx.fillStyle = p.color;
+          this.ctx.globalAlpha = p.life;
+          this.ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+          this.ctx.restore();
         }
 
-        // Ripple effect on button click
-        function createRipple(event, button) {
-            const ripple = document.createElement('span');
-            ripple.className = 'ripple';
-            
-            const rect = button.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = event.clientX - rect.left - size / 2;
-            const y = event.clientY - rect.top - size / 2;
-            
-            ripple.style.width = ripple.style.height = `${size}px`;
-            ripple.style.left = `${x}px`;
-            ripple.style.top = `${y}px`;
-            
-            button.appendChild(ripple);
-            
-            setTimeout(() => ripple.remove(), 600);
+        if (this.particles.length > 0) {
+          this.animationId = requestAnimationFrame(() => this.animate());
+        } else {
+          this.animationId = null;
+        }
+      }
+    }
+
+    /**
+     * MAIN APPLICATION MODULE (LaughZoneApp)
+     * Modular structure to cleanly add live APIs, videos, or external feeds.
+     */
+    const LaughZoneApp = (() => {
+      let currentLang = 'en';
+      let currentCategory = null;
+      let currentIndex = 0;
+      let soundFx, confetti;
+
+      function init() {
+        soundFx = new SoundFX();
+        confetti = new ConfettiEngine('confetti-canvas');
+
+        // Setup Language Switcher Listener
+        const langDropdown = document.getElementById('languageSelect');
+        langDropdown.addEventListener('change', (e) => {
+          setLanguage(e.target.value);
+        });
+
+        // Initialize translations with default language
+        updateDOMTranslations();
+      }
+
+      function setLanguage(langCode) {
+        if (!TRANSLATIONS[langCode]) return;
+        currentLang = langCode;
+
+        // Apply RTL direction for Afghan Pashto/Dari
+        if (langCode === 'ps') {
+          document.documentElement.setAttribute('dir', 'rtl');
+        } else {
+          document.documentElement.setAttribute('dir', 'ltr');
         }
 
-        // Handle button clicks
-        function handleClick(button, section) {
-            console.log(`Navigating to: ${section}`);
-            // Add your navigation logic here
-            alert(`Opening ${section.charAt(0).toUpperCase() + section.slice(1)} section!`);
+        updateDOMTranslations();
+        soundFx.playBoing();
+        confetti.burst(window.innerWidth - 100, 60);
+
+        // If modal is open, refresh its content in new language
+        if (currentCategory) {
+          renderModalContent();
         }
+      }
 
-        // Add event listeners for ripple effect
-        document.querySelectorAll('.fun-button').forEach(button => {
-            button.addEventListener('click', function(e) {
-                createRipple(e, this);
-            });
+      function updateDOMTranslations() {
+        const langData = TRANSLATIONS[currentLang];
+        document.querySelectorAll('[data-i18n]').forEach((el) => {
+          const key = el.getAttribute('data-i18n');
+          if (langData[key]) {
+            el.innerText = langData[key];
+          }
         });
+        document.getElementById('modalNextBtn').innerText = langData.nextBtn;
+      }
 
-        // Mouse move effect for orbs
-        document.addEventListener('mousemove', (e) => {
-            const orbs = document.querySelectorAll('.orb');
-            const mouseX = e.clientX / window.innerWidth;
-            const mouseY = e.clientY / window.innerHeight;
-            
-            orbs.forEach((orb, index) => {
-                const speed = (index + 1) * 20;
-                const x = (mouseX - 0.5) * speed;
-                const y = (mouseY - 0.5) * speed;
-                orb.style.transform = `translate(${x}px, ${y}px)`;
-            });
-        });
+      function openModal(category) {
+        currentCategory = category;
+        currentIndex = 0;
+        soundFx.playBoing();
+        confetti.burst(window.innerWidth / 2, window.innerHeight / 2);
+        
+        renderModalContent();
+        document.getElementById('laughModal').classList.add('active');
+      }
 
-        // Hide loading screen
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loadingOverlay').classList.add('hidden');
-            }, 500);
-        });
+      function closeModal() {
+        document.getElementById('laughModal').classList.remove('active');
+        currentCategory = null;
+      }
 
-        // Initialize
-        createParticles();
-    </script>
+      function closeModalOnBackdrop(e) {
+        if (e.target.id === 'laughModal') {
+          closeModal();
+        }
+      }
+
+      function nextItem() {
+        const items = TRANSLATIONS[currentLang][currentCategory] || [];
+        if (items.length > 0) {
+          currentIndex = (currentIndex + 1) % items.length;
+          renderModalContent();
+          soundFx.playBoing();
+          confetti.burst(window.innerWidth / 2, window.innerHeight / 2);
+        }
+      }
+
+      function renderModalContent() {
+        const langData = TRANSLATIONS[currentLang];
+        const titleEl = document.getElementById('modalTitle');
+        const bodyEl = document.getElementById('modalBody');
+
+        const titles = {
+          stories: langData.storiesTitle,
+          jokes: langData.jokesTitle,
+          videos: langData.videosTitle
+        };
+
+        titleEl.innerText = titles[currentCategory] || "Laugh Zone";
+
+        const items = langData[currentCategory] || [];
+        const content = items[currentIndex] || "Stay tuned for more hilarious updates!";
+
+        bodyEl.innerHTML = `
+          <div style="font-size: 1.25rem; font-weight: 600; padding: 12px 0;">
+            ${content.replace(/\n/g, '<br/>')}
+          </div>
+        `;
+      }
+
+      function triggerCheer() {
+        soundFx.playCheer();
+        confetti.burst(100, 100);
+      }
+
+      return {
+        init,
+        setLanguage,
+        openModal,
+        closeModal,
+        closeModalOnBackdrop,
+        nextItem,
+        triggerCheer
+      };
+    })();
+
+    // Initialize application on DOM ready
+    document.addEventListener('DOMContentLoaded', LaughZoneApp.init);
+  </script>
 </body>
 </html>
