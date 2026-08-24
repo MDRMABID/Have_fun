@@ -97,6 +97,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .brand-pill {
@@ -312,6 +314,9 @@
       justify-content: center;
       align-items: center;
       gap: 10px;
+      text-decoration: none;
+      cursor: var(--cursor-pointer) !important;
+      background: var(--primary-orange);
     }
 
     .card-stories .card-btn { background: var(--primary-orange); }
@@ -322,107 +327,9 @@
       box-shadow: 6px 6px 0 var(--border-color);
     }
 
-    /* ==========================================================================
-       INTERACTIVE MODAL / PREVIEW DRAWER
-       ========================================================================== */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(6px);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-    }
-
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .modal-card {
-      background: #FFF;
-      border: 4px solid var(--border-color);
-      border-radius: var(--radius-large);
-      box-shadow: 12px 12px 0 var(--border-color);
-      width: 100%;
-      max-width: 620px;
-      max-height: 85vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      transform: scale(0.9) translateY(20px);
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .modal-overlay.active .modal-card {
-      transform: scale(1) translateY(0);
-    }
-
-    .modal-header {
-      padding: 20px 24px;
-      background: var(--primary-yellow);
-      border-bottom: 3px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .modal-title {
-      font-family: var(--font-display);
-      font-size: 1.6rem;
-      font-weight: 700;
-    }
-
-    .modal-close {
-      background: #FFF;
-      border: 3px solid var(--border-color);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .card-btn:active {
+      transform: translate(2px, 2px);
       box-shadow: 2px 2px 0 var(--border-color);
-      transition: transform 0.1s ease;
-    }
-
-    .modal-close:hover {
-      transform: scale(1.1);
-    }
-
-    .modal-body {
-      padding: 24px;
-      overflow-y: auto;
-      font-size: 1.1rem;
-      line-height: 1.6;
-    }
-
-    .modal-footer {
-      padding: 16px 24px;
-      border-top: 3px solid var(--border-color);
-      background: #F8F9FA;
-      display: flex;
-      justify-content: flex-end;
-      gap: 12px;
-    }
-
-    .modal-action-btn {
-      padding: 10px 20px;
-      font-family: var(--font-display);
-      font-size: 1rem;
-      font-weight: 700;
-      border-radius: 999px;
-      border: 3px solid var(--border-color);
-      background: var(--neon-green);
-      box-shadow: 3px 3px 0 var(--border-color);
     }
 
     /* ==========================================================================
@@ -463,6 +370,40 @@
       background: rgba(255, 255, 255, 0.4);
       border-top: 3px solid var(--border-color);
       z-index: 10;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE ADJUSTMENTS
+       ========================================================================== */
+    @media (max-width: 480px) {
+      .top-bar {
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        padding: 10px 12px;
+      }
+      .brand-pill {
+        font-size: 1rem;
+        padding: 4px 12px;
+      }
+      .lang-dropdown {
+        font-size: 0.85rem;
+        padding: 6px 32px 6px 12px;
+      }
+      .cards-section {
+        gap: 20px;
+        padding: 0 12px;
+      }
+      .action-card {
+        padding: 24px 16px;
+      }
+      .card-title {
+        font-size: 1.4rem;
+      }
+      .card-btn {
+        font-size: 1rem;
+        padding: 12px 16px;
+      }
     }
   </style>
 </head>
@@ -509,47 +450,31 @@
     <section class="cards-section">
       
       <!-- Card 1: Stories -->
-      <article class="action-card card-stories clickable" onclick="LaughZoneApp.openModal('stories')">
+      <article class="action-card card-stories clickable">
         <div class="card-icon-wrap">📖</div>
         <h2 class="card-title" data-i18n="storiesTitle">Funny Stories</h2>
         <p class="card-desc" data-i18n="storiesDesc">Wild, real, and awkwardly hilarious tales that will make you spit your drink.</p>
-        <button class="card-btn" data-i18n="storiesBtn">Read Stories 📖</button>
+        <a href="#" class="card-btn" data-i18n="storiesBtn" onclick="LaughZoneApp.navigateTo('stories'); return false;">Read Stories 📖</a>
       </article>
 
       <!-- Card 2: Jokes -->
-      <article class="action-card card-jokes clickable" onclick="LaughZoneApp.openModal('jokes')">
+      <article class="action-card card-jokes clickable">
         <div class="card-icon-wrap">🤣</div>
         <h2 class="card-title" data-i18n="jokesTitle">Punchy Jokes</h2>
         <p class="card-desc" data-i18n="jokesDesc">Quick one-liners, clever dad jokes, and puns that hit right in the funny bone.</p>
-        <button class="card-btn" data-i18n="jokesBtn">Crack a Joke 🤣</button>
+        <a href="#" class="card-btn" data-i18n="jokesBtn" onclick="LaughZoneApp.navigateTo('jokes'); return false;">Crack a Joke 🤣</a>
       </article>
 
       <!-- Card 3: Videos -->
-      <article class="action-card card-videos clickable" onclick="LaughZoneApp.openModal('videos')">
+      <article class="action-card card-videos clickable">
         <div class="card-icon-wrap">🎬</div>
         <h2 class="card-title" data-i18n="videosTitle">Funny Videos</h2>
         <p class="card-desc" data-i18n="videosDesc">Epic animal bloopers, instant karma fails, and non-stop giggle reels on loop.</p>
-        <button class="card-btn" data-i18n="videosBtn">Watch Clips 🎬</button>
+        <a href="#" class="card-btn" data-i18n="videosBtn" onclick="LaughZoneApp.navigateTo('videos'); return false;">Watch Clips 🎬</a>
       </article>
 
     </section>
   </main>
-
-  <!-- Interactive Dynamic Modal -->
-  <div id="laughModal" class="modal-overlay clickable" onclick="LaughZoneApp.closeModalOnBackdrop(event)">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 id="modalTitle" class="modal-title">Category</h3>
-        <button class="modal-close clickable" onclick="LaughZoneApp.closeModal()">✕</button>
-      </div>
-      <div id="modalBody" class="modal-body">
-        <!-- Content dynamically injected here -->
-      </div>
-      <div class="modal-footer">
-        <button id="modalNextBtn" class="modal-action-btn clickable" onclick="LaughZoneApp.nextItem()">Give Me Another! 🚀</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Footer -->
   <footer>
@@ -557,7 +482,7 @@
   </footer>
 
   <!-- ==========================================================================
-       JAVASCRIPT: I18N, MODALS, SOUND FX, AND EXTENSIBLE API MODULE
+       JAVASCRIPT: I18N, NAVIGATION, SOUND FX, AND EXTENSIBLE API MODULE
        ========================================================================== -->
   <script>
     /**
@@ -577,23 +502,7 @@
         videosTitle: "Funny Videos",
         videosDesc: "Epic animal bloopers, instant karma fails, and non-stop giggle reels on loop.",
         videosBtn: "Watch Clips 🎬",
-        footerText: "🎪 Made with pure joy for gigglers worldwide. Laugh everyday!",
-        nextBtn: "Give Me Another! 🚀",
-        stories: [
-          "I waved back enthusiastically at someone across the street for 2 whole minutes before realizing they were waving at the dog behind me. We are now legally strangers forever.",
-          "My smart vacuum cleaner escaped through the front door and was found 3 houses down trying to vacuum a neighbor's driveway.",
-          "I joined a Zoom meeting with my camera on while brushing my teeth wearing a dinosaur costume. My boss just stared and said: 'Good morning, T-Rex.'"
-        ],
-        jokes: [
-          "Why don't scientists trust atoms? Because they make up everything! ⚛️",
-          "Parallel lines have so much in common... it's a shame they'll never meet! 📏",
-          "Why did the scarecrow win an award? Because he was outstanding in his field! 🌾"
-        ],
-        videos: [
-          "🐱 Video Feed Ready: 'Cat attempts 10-foot jump onto kitchen counter and fails in slow motion.'",
-          "🐶 Video Feed Ready: 'Golden retriever gets startled by its own hiccup.'",
-          "🦜 Video Feed Ready: 'Parrot mimics smoke alarm every time owner burns toast.'"
-        ]
+        footerText: "🎪 Made with pure joy for gigglers worldwide. Laugh everyday!"
       },
       bn: {
         badgeText: "🔥 সতর্কতা: অনিয়ন্ত্রিত হাসির প্রবল সম্ভাবনা!",
@@ -608,23 +517,7 @@
         videosTitle: "মজার ভিডিও",
         videosDesc: "পশুপাখির ফানি কাণ্ড আর সেরা সব হাসির ক্লিপের বিনোদন মেলা।",
         videosBtn: "ভিডিও দেখুন 🎬",
-        footerText: "🎪 পৃথিবীব্যাপী হাসিমুখ ছড়িয়ে দিতে তৈরি। প্রতিদিন প্রাণখুলে হাসুন!",
-        nextBtn: "আরেকটি দেখাও! 🚀",
-        stories: [
-          "একবার রাস্তায় একজনকে হাত নাড়তে দেখে আমিও খুব ভাব নিয়ে ২ মিনিট হাত নাড়লাম। পরে দেখি সে আমার পেছনের বিড়ালটাকে ডাকছিল!",
-          "আমার রোবট ভ্যাকুয়াম ক্লিনার দরজা খোলা পেয়ে পালিয়ে গিয়ে পাশের বাড়ির উঠোন পরিষ্কার করছিল!",
-          "ঘুমের ঘোরে জুমে মিটিং অন করে টুথব্রাশ করতে করতে বসের সামনে চলে এসেছিলাম। বস বললেন, 'মিটিং পরে, আগে দাঁত মাজো!'"
-        ],
-        jokes: [
-          "শিক্ষক: বলতো পৃথিবী কেন ঘোরে?\nছাত্র: স্যার, আপনি যা পড়াচ্ছেন তাতে তো পৃথিবীরও মাথা ঘুরছে! 🌍",
-          "ডাক্তার: আপনার চোখের সমস্যা, চশমা লাগবে।\nরোগী: ডাক্তারবাবু, চশমা পরলে আমি পড়তে পারব তো? আমি কিন্তু অশিক্ষিত! 🤓",
-          "বল্টু: দোস্ত, পরীক্ষা কেমন হলো?\nমন্টু: একদম পানির মতো সহজ!\nবল্টু: তাহলে লিখেছিস কত?\nমন্টু: সাতার জানতাম না তো, তাই ডুবে গেলাম! 🌊"
-        ],
-        videos: [
-          "🐱 ভিডিও রেডি: বিড়ালটি সোফায় লাফ দিতে গিয়ে পিছলে পড়ে গেল স্লো-মোশনে!",
-          "🐶 ভিডিও রেডি: নিজের লেজ তাড়া করতে গিয়ে গোল গোল ঘুরছে মিষ্টি কুকুরছানা।",
-          "🦜 ভিডিও রেডি: কাজের সময় টিয়া পাখি এসে কীবোর্ডে নাচানাচি শুরু করল!"
-        ]
+        footerText: "🎪 পৃথিবীব্যাপী হাসিমুখ ছড়িয়ে দিতে তৈরি। প্রতিদিন প্রাণখুলে হাসুন!"
       },
       es: {
         badgeText: "🔥 ¡Advertencia: Risas incontrolables!",
@@ -639,23 +532,7 @@
         videosTitle: "Videos Divertidos",
         videosDesc: "Caídas épicas, mascotas traviesas y momentos virales garantizados.",
         videosBtn: "Ver Videos 🎬",
-        footerText: "🎪 Hecho con pura alegría para hacer sonreír al mundo entero.",
-        nextBtn: "¡Dame otro! 🚀",
-        stories: [
-          "Saludé con entusiasmo a alguien en la calle durante 2 minutos hasta notar que saludaba al perro detrás de mí.",
-          "Mi aspiradora robot se escapó por la puerta y la encontramos en casa del vecino limpiándole la entrada.",
-          "Entré a una videollamada de trabajo en pijama de dinosaurio cepillándome los dientes. Mi jefe solo dijo: 'Buenos días, Dino'."
-        ],
-        jokes: [
-          "¿Qué le dice una impresora a otra? — ¿Esa hoja es tuya o es una impresión mía? 🖨️",
-          "¿Por qué los pájaros no usan Facebook? ¡Porque ya tienen Twitter! 🐦",
-          "¿Cómo se llama el campeón de buceo japonés? — Tokofondo. 🌊"
-        ],
-        videos: [
-          "🐱 Video Listo: Gato intenta saltar a la mesa y resbala en cámara lenta.",
-          "🐶 Video Listo: Perro que se asusta con su propio reflejo en el espejo.",
-          "🦜 Video Listo: Loro que canta ópera cada vez que tocan el timbre."
-        ]
+        footerText: "🎪 Hecho con pura alegría para hacer sonreír al mundo entero."
       },
       pt: {
         badgeText: "🔥 Aviso: Alto risco de gargalhadas!",
@@ -670,23 +547,7 @@
         videosTitle: "Vídeos Hilários",
         videosDesc: "Os melhores tombos, trapalhadas de animais e risadas garantidas.",
         videosBtn: "Assistir Vídeos 🎬",
-        footerText: "🎪 Feito com alegria para espalhar sorrisos pelo mundo!",
-        nextBtn: "Manda outra! 🚀",
-        stories: [
-          "Fiquei acenando para uma pessoa na rua por 2 minutos até perceber que ela estava chamando o cachorro atrás de mim.",
-          "Meu aspirador robô fugiu pelo portão e foi encontrado varrendo a calçada do vizinho.",
-          "Liguei a câmera na reunião de trabalho escovando os dentes com pijama de unicórnio. Meu chefe só riu."
-        ],
-        jokes: [
-          "Por que o livro de matemática se suicidou? — Porque tinha muitos problemas! 📐",
-          "O que o pato falou para a pata? — Vem Quá! 🦆",
-          "Qual é o café favorito dos desenvolvedores? — Java! ☕"
-        ],
-        videos: [
-          "🐱 Vídeo Pronto: Gato tenta caçar o laser e cai na caixa de papelão.",
-          "🐶 Vídeo Pronto: Cachorro correndo de costas ao ver um limão.",
-          "🦜 Vídeo Pronto: Papagaio dançando samba no ventilador desligado."
-        ]
+        footerText: "🎪 Feito com alegria para espalhar sorrisos pelo mundo!"
       },
       ps: {
         badgeText: "🔥 خبرداری: دلته بې حده خندا او خوشحالي ده!",
@@ -701,23 +562,7 @@
         videosTitle: "خندونکې ویډیوګانې",
         videosDesc: "د حیواناتو او خلکو په زړه پورې او خندونکې صحنې او لنډې ویډیوګانې.",
         videosBtn: "ویډیو وګورئ 🎬",
-        footerText: "🎪 په نړۍ کې د خندا او خوشحالۍ خپرولو لپاره. تل موسکي اوسئ!",
-        nextBtn: "بله راوړه! 🚀",
-        stories: [
-          "ما په لاره کې یو کس ته ۲ دقیقې لاس خوځاوه، وروسته پوه شوم چې هغه زما شاته سپي ته لاس خوځاوه!",
-          "زموږ د کور د پاکولو کوچنی اتومات ماشین له کوره وتلی و او د ګاونډي د دروازې مخه یې پاکوله!",
-          "د سهار په آنلاین کاري غونډه کې مې کمېره خلاصه وه او غاښونه مې پاکول، رییس راته وویل: لومړی غاښونه ووینځه!"
-        ],
-        jokes: [
-          "ښوونکی: ولې ناوخته راغلې؟\nشاګرد: استاد، د خوب تعبیر مې لیده چې څنګه ستا صنف ته پر وخت راشم! 😂",
-          "ډاکټر: دا درمل په خوب کې خوره.\nناروغ: ډاکټر صیب، بیا خو باید لومړی راویښ شم! 💊",
-          "یو کس وویل: زه ډېر هوښیار یم، ۵ میاشتې کې مې د ۳ کلونو ماشومانو معما خلاصه کړه! 🧩"
-        ],
-        videos: [
-          "🐱 ویډیو چمتو ده: پېشو چې په ورو حرکت (Slow-motion) کې له مېز څخه ښکته لوېږي.",
-          "🐶 ویډیو چمتو ده: سپی چې په خپله لکۍ پسې راڅرخي.",
-          "🦜 ویډیو چمتو ده: طوطي چې د زنګ له غږ سره نڅا کوي."
-        ]
+        footerText: "🎪 په نړۍ کې د خندا او خوشحالۍ خپرولو لپاره. تل موسکي اوسئ!"
       }
     };
 
@@ -845,8 +690,6 @@
      */
     const LaughZoneApp = (() => {
       let currentLang = 'en';
-      let currentCategory = null;
-      let currentIndex = 0;
       let soundFx, confetti;
 
       function init() {
@@ -877,11 +720,6 @@
         updateDOMTranslations();
         soundFx.playBoing();
         confetti.burst(window.innerWidth - 100, 60);
-
-        // If modal is open, refresh its content in new language
-        if (currentCategory) {
-          renderModalContent();
-        }
       }
 
       function updateDOMTranslations() {
@@ -892,75 +730,110 @@
             el.innerText = langData[key];
           }
         });
-        document.getElementById('modalNextBtn').innerText = langData.nextBtn;
       }
 
-      function openModal(category) {
-        currentCategory = category;
-        currentIndex = 0;
+      /**
+       * NAVIGATION: Redirects to respective pages.
+       * You can replace the alert with actual page navigation.
+       * Example: window.location.href = '/stories.html';
+       */
+      function navigateTo(page) {
         soundFx.playBoing();
         confetti.burst(window.innerWidth / 2, window.innerHeight / 2);
         
-        renderModalContent();
-        document.getElementById('laughModal').classList.add('active');
-      }
-
-      function closeModal() {
-        document.getElementById('laughModal').classList.remove('active');
-        currentCategory = null;
-      }
-
-      function closeModalOnBackdrop(e) {
-        if (e.target.id === 'laughModal') {
-          closeModal();
-        }
-      }
-
-      function nextItem() {
-        const items = TRANSLATIONS[currentLang][currentCategory] || [];
-        if (items.length > 0) {
-          currentIndex = (currentIndex + 1) % items.length;
-          renderModalContent();
-          soundFx.playBoing();
-          confetti.burst(window.innerWidth / 2, window.innerHeight / 2);
-        }
-      }
-
-      function renderModalContent() {
-        const langData = TRANSLATIONS[currentLang];
-        const titleEl = document.getElementById('modalTitle');
-        const bodyEl = document.getElementById('modalBody');
-
-        const titles = {
-          stories: langData.storiesTitle,
-          jokes: langData.jokesTitle,
-          videos: langData.videosTitle
+        // Page mapping - you can replace these with actual URLs
+        const pageUrls = {
+          stories: '#stories',
+          jokes: '#jokes',
+          videos: '#videos'
         };
+        
+        // Show a friendly message with the page name
+        const pageNames = {
+          stories: 'Funny Stories',
+          jokes: 'Jokes',
+          videos: 'Funny Videos'
+        };
+        
+        const pageName = pageNames[page] || page;
+        const url = pageUrls[page] || '#';
+        
+        // For demonstration, show a toast-like message
+        // In production, use window.location.href = '/pages/' + page + '.html';
+        // or use a router.
+        
+        // Create a temporary toast notification
+        showToast(`📣 You are now viewing: ${pageName}`);
+        
+        // Uncomment below to actually navigate
+        // window.location.href = '/pages/' + page + '.html';
+        
+        // For now, we'll just update the URL hash
+        window.location.hash = url;
+      }
 
-        titleEl.innerText = titles[currentCategory] || "Laugh Zone";
-
-        const items = langData[currentCategory] || [];
-        const content = items[currentIndex] || "Stay tuned for more hilarious updates!";
-
-        bodyEl.innerHTML = `
-          <div style="font-size: 1.25rem; font-weight: 600; padding: 12px 0;">
-            ${content.replace(/\n/g, '<br/>')}
-          </div>
+      function showToast(message) {
+        // Remove existing toast
+        const existing = document.querySelector('.toast-notification');
+        if (existing) existing.remove();
+        
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification';
+        toast.innerHTML = message;
+        toast.style.cssText = `
+          position: fixed;
+          bottom: 30px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: var(--text-dark);
+          color: #FFF;
+          padding: 16px 32px;
+          border-radius: 999px;
+          font-family: var(--font-display);
+          font-size: 1.2rem;
+          font-weight: 700;
+          border: 3px solid var(--border-color);
+          box-shadow: 6px 6px 0 var(--border-color);
+          z-index: 2000;
+          animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          max-width: 90%;
+          text-align: center;
         `;
+        
+        // Add keyframe animation
+        const style = document.createElement('style');
+        style.textContent = `
+          @keyframes slideUp {
+            0% { transform: translateX(-50%) translateY(100px); opacity: 0; }
+            100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+          }
+          .toast-notification {
+            animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          }
+        `;
+        document.head.appendChild(style);
+        
+        document.body.appendChild(toast);
+        
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transition = 'opacity 0.3s ease';
+          setTimeout(() => toast.remove(), 400);
+        }, 3000);
       }
 
       function triggerCheer() {
         soundFx.playCheer();
         confetti.burst(100, 100);
+        confetti.burst(window.innerWidth - 100, 100);
+        confetti.burst(window.innerWidth / 2, 60);
       }
 
       return {
         init,
         setLanguage,
-        openModal,
-        closeModal,
-        closeModalOnBackdrop,
-        nextItem,
+        navigateTo,
         triggerCheer
       };
     })();
