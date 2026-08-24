@@ -114,6 +114,13 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      text-decoration: none;
+    }
+
+    .brand-pill:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 var(--border-color);
+      transition: all 0.15s ease;
     }
 
     .lang-container {
@@ -420,9 +427,9 @@
 
   <!-- Sticky Top Navigation -->
   <header class="top-bar">
-    <div class="brand-pill clickable" onclick="LaughZoneApp.triggerCheer()">
+    <a href="#" class="brand-pill clickable" onclick="LaughZoneApp.triggerCheer(); return false;">
       <span>🤡</span> Laugh Zone
-    </div>
+    </a>
     
     <div class="lang-container">
       <label for="languageSelect" class="lang-label">🌐 Language:</label>
@@ -454,7 +461,7 @@
         <div class="card-icon-wrap">📖</div>
         <h2 class="card-title" data-i18n="storiesTitle">Funny Stories</h2>
         <p class="card-desc" data-i18n="storiesDesc">Wild, real, and awkwardly hilarious tales that will make you spit your drink.</p>
-        <a href="https://mdrmabid.github.io/Have_fun/stories.html" class="card-btn" data-i18n="storiesBtn" onclick="LaughZoneApp.navigateTo('stories'); return false;">Read Stories 📖</a>
+        <a href="https://mdrmabid.github.io/Have_fun/stories.html" class="card-btn" data-i18n="storiesBtn">Read Stories 📖</a>
       </article>
 
       <!-- Card 2: Jokes -->
@@ -734,42 +741,22 @@
 
       /**
        * NAVIGATION: Redirects to respective pages.
-       * You can replace the alert with actual page navigation.
-       * Example: window.location.href = '/stories.html';
+       * For jokes and videos (which don't have URLs yet), show a toast.
+       * For stories, we use the direct href link.
        */
       function navigateTo(page) {
         soundFx.playBoing();
         confetti.burst(window.innerWidth / 2, window.innerHeight / 2);
         
-        // Page mapping - you can replace these with actual URLs
-        const pageUrls = {
-          stories: '#stories',
-          jokes: '#jokes',
-          videos: '#videos'
-        };
-        
-        // Show a friendly message with the page name
         const pageNames = {
-          stories: 'Funny Stories',
           jokes: 'Jokes',
           videos: 'Funny Videos'
         };
         
         const pageName = pageNames[page] || page;
-        const url = pageUrls[page] || '#';
         
-        // For demonstration, show a toast-like message
-        // In production, use window.location.href = '/pages/' + page + '.html';
-        // or use a router.
-        
-        // Create a temporary toast notification
-        showToast(`📣 You are now viewing: ${pageName}`);
-        
-        // Uncomment below to actually navigate
-        // window.location.href = '/pages/' + page + '.html';
-        
-        // For now, we'll just update the URL hash
-        window.location.hash = url;
+        // Show toast notification for pages that don't have URLs yet
+        showToast(`📣 Coming soon: ${pageName} page! 🚧`);
       }
 
       function showToast(message) {
