@@ -1,1131 +1,840 @@
-
-# Generate the complete HTML file with all 100 stories
-
-html_content = '''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>😂 Happy World - Funny Stories to Make You Smile</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🤣 Funny Stories - Laugh Zone</title>
+
+    <!-- Playful Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+
     <style>
-        /* ============================================
-           GLOBAL STYLES & RESET
-           ============================================ */
+        /* ==========================================================================
+           CSS VARIABLES & THEME SETUP
+           ========================================================================== */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #FFF6B7 0%, #FEE140 25%, #FA709A 75%, #FEE140 100%);
+            --primary-yellow: #FFD200;
+            --primary-orange: #FF5E36;
+            --bubble-pink: #FF3366;
+            --electric-purple: #8A2387;
+            --neon-green: #00E676;
+            --card-bg: #FFFFFF;
+            --text-dark: #1F1B24;
+            --text-muted: #5A5364;
+            --border-color: #1F1B24;
+            
+            --font-display: 'Fredoka', 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+            --font-body: 'Quicksand', -apple-system, BlinkMacSystemFont, sans-serif;
+            
+            --neo-shadow: 6px 6px 0px var(--border-color);
+            --neo-shadow-hover: 10px 10px 0px var(--border-color);
+            --neo-shadow-active: 2px 2px 0px var(--border-color);
+            --radius-large: 28px;
+            --radius-small: 16px;
+
+            /* Funny Custom Cursors */
+            --cursor-default: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'><text y='28' font-size='28'>🍌</text></svg>") 4 4, auto;
+            --cursor-pointer: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 36 36'><text y='28' font-size='30'>🤣</text></svg>") 16 16, pointer;
+        }
+
+        /* ==========================================================================
+           GLOBAL STYLES
+           ========================================================================== */
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            cursor: var(--cursor-default);
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden;
             min-height: 100vh;
+            background: var(--bg-gradient);
+            background-size: 300% 300%;
+            animation: gradientShift 15s ease infinite;
+            font-family: var(--font-body);
+            color: var(--text-dark);
+            overflow-x: hidden;
             position: relative;
-            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><text y="20" font-size="20">✨</text></svg>'), auto;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* ============================================
-           ANIMATED RAINBOW BACKGROUND
-           ============================================ */
-        .background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, 
-                #ff6b9d, #c44569, #f8b500, 
-                #ff6348, #ff4757, #ffa502,
-                #2ed573, #1e90ff, #3742fa,
-                #ff6b9d, #c44569);
-            background-size: 400% 400%;
-            animation: rainbowShift 15s ease infinite;
-            z-index: -3;
-        }
-
-        @keyframes rainbowShift {
+        @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* ============================================
-           FLOATING EMOJIS
-           ============================================ */
-        .emoji {
-            position: fixed;
-            font-size: 2rem;
-            animation: float 8s ease-in-out infinite;
-            opacity: 0.7;
-            z-index: -2;
-            pointer-events: none;
+        a, button, select, .clickable {
+            cursor: var(--cursor-pointer) !important;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-30px) rotate(180deg); }
+        /* RTL Support */
+        [dir="rtl"] {
+            direction: rtl;
+            font-family: 'Fredoka', Tahoma, sans-serif;
         }
 
-        /* ============================================
-           FLOATING BALLOONS
-           ============================================ */
-        .balloon {
-            position: fixed;
-            width: 50px;
-            height: 60px;
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), transparent);
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            animation: balloonFloat 12s ease-in-out infinite;
-            opacity: 0.6;
-            z-index: -2;
-            pointer-events: none;
-        }
-
-        .balloon::after {
-            content: '';
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 20px;
-            background: rgba(255,255,255,0.5);
-        }
-
-        @keyframes balloonFloat {
-            0%, 100% { transform: translateY(0px) translateX(0px); }
-            25% { transform: translateY(-40px) translateX(20px); }
-            50% { transform: translateY(-20px) translateX(-20px); }
-            75% { transform: translateY(-50px) translateX(10px); }
-        }
-
-        /* ============================================
-           TWINKLING STARS
-           ============================================ */
-        .star {
-            position: fixed;
-            width: 3px;
-            height: 3px;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 3s ease-in-out infinite;
-            z-index: -2;
-            pointer-events: none;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.5); }
-        }
-
-        /* ============================================
-           SPARKLE EFFECTS
-           ============================================ */
-        .sparkle {
-            position: fixed;
-            width: 4px;
-            height: 4px;
-            background: gold;
-            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            animation: sparkle 2s ease-in-out infinite;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        @keyframes sparkle {
-            0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
-            50% { opacity: 1; transform: scale(1) rotate(180deg); }
-        }
-
-        /* ============================================
-           ANIMATED CLOUDS
-           ============================================ */
-        .cloud {
-            position: fixed;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 100px;
-            animation: cloudMove 20s linear infinite;
-            z-index: -2;
-            pointer-events: none;
-        }
-
-        .cloud::before,
-        .cloud::after {
-            content: '';
-            position: absolute;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 100px;
-        }
-
-        @keyframes cloudMove {
-            0% { transform: translateX(-200px); }
-            100% { transform: translateX(calc(100vw + 200px)); }
-        }
-
-        /* ============================================
-           MAIN CONTAINER
-           ============================================ */
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ============================================
-           HEADER SECTION
-           ============================================ */
-        .header {
-            text-align: center;
-            padding: 40px 20px;
-            animation: fadeInDown 1s ease-out;
-        }
-
-        .title {
-            font-size: 3rem;
-            color: white;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-            margin-bottom: 15px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .subtitle {
-            font-size: 1.3rem;
-            color: rgba(255,255,255,0.95);
-            font-style: italic;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ============================================
-           STORY CARD (GLASSMORPHISM)
-           ============================================ */
-        .story-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 35px;
-            margin: 30px 0;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            position: relative;
-            overflow: hidden;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        .story-card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #ff6b9d, #c44569, #f8b500, #ff6348, #2ed573, #1e90ff);
-            border-radius: 20px;
-            z-index: -1;
-            opacity: 0.5;
-            animation: rainbowGlow 4s linear infinite;
-        }
-
-        @keyframes rainbowGlow {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .story-title {
-            font-size: 2rem;
-            color: white;
-            margin-bottom: 20px;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .story-content {
-            font-size: 1.15rem;
-            line-height: 1.8;
-            color: rgba(255,255,255,0.95);
-            text-align: justify;
-            animation: fadeText 0.6s ease-out;
-        }
-
-        @keyframes fadeText {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* ============================================
-           BUTTONS SECTION
-           ============================================ */
-        .buttons-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            margin: 30px 0;
-        }
-
-        .btn {
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
-        .btn:active {
-            transform: translateY(-1px);
-        }
-
-        .btn-next {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-random {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .btn-favorite {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            color: white;
-        }
-
-        .btn-surprise {
-            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
-            color: white;
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .btn:active::after {
-            width: 300px;
-            height: 300px;
-        }
-
-        /* ============================================
-           STATS BAR
-           ============================================ */
-        .stats-bar {
-            background: rgba(255, 255, 255, 0.2);
+        /* ==========================================================================
+           TOP BAR
+           ========================================================================== */
+        .top-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
             backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.4);
+            border-bottom: 3px solid var(--border-color);
+            padding: 12px 24px;
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
-            gap: 15px;
-            border: 1px solid rgba(255,255,255,0.3);
+            gap: 8px;
         }
 
-        .stat-item {
-            text-align: center;
-            color: white;
+        .brand-pill {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            background: #FFF;
+            padding: 6px 16px;
+            border-radius: 999px;
+            border: 3px solid var(--border-color);
+            box-shadow: 3px 3px 0 var(--border-color);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
         }
 
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .brand-pill:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 var(--border-color);
+            transition: all 0.15s ease;
         }
 
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        /* Happy Level Progress Bar */
-        .progress-container {
-            width: 100%;
-            margin-top: 15px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 25px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 15px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #f093fb, #f5576c, #fa709a);
-            border-radius: 15px;
-            transition: width 0.5s ease;
+        .lang-container {
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 0.9rem;
+            gap: 10px;
         }
 
-        /* ============================================
-           FLOATING HEARTS
-           ============================================ */
-        .heart {
-            position: fixed;
-            color: #ff6b9d;
-            font-size: 1.5rem;
-            animation: heartFloat 4s ease-in-out infinite;
-            opacity: 0.7;
-            z-index: -1;
+        .lang-label {
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        @media (min-width: 600px) {
+            .lang-label { display: inline-block; }
+        }
+
+        .lang-dropdown {
+            appearance: none;
+            -webkit-appearance: none;
+            background: #FFF url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%231F1B24' viewBox='0 0 16 16'><path d='M8 11.5l-5-5h10l-5 5z'/></svg>") no-repeat right 14px center;
+            padding: 8px 36px 8px 16px;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            border: 3px solid var(--border-color);
+            border-radius: 999px;
+            box-shadow: var(--neo-shadow);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            color: var(--text-dark);
+            outline: none;
+        }
+
+        .lang-dropdown:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: var(--neo-shadow-hover);
+        }
+
+        .lang-dropdown:active {
+            transform: translate(2px, 2px);
+            box-shadow: var(--neo-shadow-active);
+        }
+
+        /* ==========================================================================
+           PAGE HEADER
+           ========================================================================== */
+        .page-header {
+            text-align: center;
+            padding: 40px 20px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .page-header .emoji-burst {
+            font-size: 4rem;
+            display: block;
+            animation: wobble 2s ease-in-out infinite;
+        }
+
+        @keyframes wobble {
+            0%, 100% { transform: rotate(-3deg) scale(1); }
+            50% { transform: rotate(3deg) scale(1.1); }
+        }
+
+        .page-header h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.8rem, 7vw, 4.5rem);
+            font-weight: 700;
+            color: var(--text-dark);
+            text-shadow: 4px 4px 0px #FFF, 8px 8px 0px var(--bubble-pink);
+            margin: 10px 0;
+        }
+
+        .page-header .subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-weight: 600;
+            color: #2F2A38;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 12px 24px;
+            border-radius: var(--radius-small);
+            border: 2px dashed var(--border-color);
+            display: inline-block;
+        }
+
+        /* ==========================================================================
+           STORIES GRID
+           ========================================================================== */
+        .stories-container {
+            max-width: 1200px;
+            margin: 20px auto 60px;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 30px;
+            width: 100%;
+        }
+
+        .story-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(6px);
+            border: 4px solid var(--border-color);
+            border-radius: var(--radius-large);
+            box-shadow: var(--neo-shadow);
+            padding: 28px 24px 24px;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .story-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: var(--neo-shadow-hover);
+        }
+
+        .story-card:active {
+            transform: translateY(2px);
+            box-shadow: var(--neo-shadow-active);
+        }
+
+        .story-card .story-number {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: rgba(0, 0, 0, 0.08);
+            line-height: 1;
             pointer-events: none;
         }
 
-        @keyframes heartFloat {
-            0%, 100% { transform: translateY(0px) scale(1); }
-            50% { transform: translateY(-50px) scale(1.2); }
+        .story-card .story-emoji {
+            font-size: 2.8rem;
+            margin-bottom: 8px;
         }
 
-        /* ============================================
+        .story-card .story-title {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .story-card .story-content {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            flex-grow: 1;
+            margin-bottom: 14px;
+        }
+
+        .story-card .story-tag {
+            display: inline-block;
+            background: var(--primary-yellow);
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.8rem;
+            border: 2px solid var(--border-color);
+            align-self: flex-start;
+            margin-top: 4px;
+        }
+
+        /* Different colored tags */
+        .story-card:nth-child(3n+1) .story-tag { background: #FFE066; }
+        .story-card:nth-child(3n+2) .story-tag { background: #74C0FC; }
+        .story-card:nth-child(3n+3) .story-tag { background: #FF85A2; }
+
+        /* ==========================================================================
+           BACK BUTTON
+           ========================================================================== */
+        .back-section {
+            text-align: center;
+            padding: 10px 20px 40px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 32px;
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: #FFF;
+            border: 4px solid var(--border-color);
+            border-radius: 999px;
+            box-shadow: var(--neo-shadow);
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .back-btn:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: var(--neo-shadow-hover);
+        }
+
+        .back-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: var(--neo-shadow-active);
+        }
+
+        /* ==========================================================================
            CONFETTI CANVAS
-           ============================================ */
+           ========================================================================== */
         #confetti-canvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 100;
-        }
-
-        /* ============================================
-           QUOTE BOX
-           ============================================ */
-        .quote-box {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
-            color: white;
-            font-style: italic;
-            border: 1px solid rgba(255,255,255,0.3);
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        /* ============================================
-           FOOTER
-           ============================================ */
-        .footer {
-            text-align: center;
-            padding: 30px 20px;
-            color: white;
-            font-size: 1.2rem;
-            animation: glow 2s ease-in-out infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% { text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-            50% { text-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 30px rgba(255,255,255,0.6); }
-        }
-
-        /* ============================================
-           EASTER EGG MESSAGE
-           ============================================ */
-        .easter-egg {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px;
-            border-radius: 20px;
-            font-size: 1.5rem;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            z-index: 1000;
-            transition: transform 0.5s ease;
-        }
-
-        .easter-egg.show {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        /* ============================================
-           MOUSE SPARKLE TRAIL
-           ============================================ */
-        .mouse-sparkle {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: gold;
-            border-radius: 50%;
+            width: 100vw;
+            height: 100vh;
             pointer-events: none;
             z-index: 999;
-            animation: sparkleFade 0.8s ease-out forwards;
         }
 
-        @keyframes sparkleFade {
-            0% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0); }
+        /* ==========================================================================
+           FLOATING EMOJIS
+           ========================================================================== */
+        .floating-emoji {
+            position: absolute;
+            pointer-events: none;
+            font-size: 2.2rem;
+            opacity: 0.2;
+            animation: floatAround 20s ease-in-out infinite;
+            z-index: 0;
         }
 
-        /* ============================================
-           RESPONSIVE DESIGN
-           ============================================ */
-        @media (max-width: 768px) {
-            .title {
-                font-size: 2rem;
-            }
-            
-            .subtitle {
-                font-size: 1rem;
-            }
-            
-            .story-title {
-                font-size: 1.5rem;
-            }
-            
-            .story-content {
-                font-size: 1rem;
-            }
-            
-            .btn {
-                padding: 12px 20px;
-                font-size: 0.95rem;
-            }
-            
-            .stat-value {
-                font-size: 1.5rem;
-            }
+        @keyframes floatAround {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-50px) rotate(15deg); }
         }
 
+        /* ==========================================================================
+           FOOTER
+           ========================================================================== */
+        footer {
+            text-align: center;
+            padding: 24px 16px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            background: rgba(255, 255, 255, 0.4);
+            border-top: 3px solid var(--border-color);
+            margin-top: auto;
+            z-index: 10;
+        }
+
+        /* ==========================================================================
+           RESPONSIVE
+           ========================================================================== */
         @media (max-width: 480px) {
-            .title {
-                font-size: 1.6rem;
+            .top-bar {
+                flex-wrap: wrap;
+                gap: 8px;
+                justify-content: center;
+                padding: 10px 12px;
             }
-            
-            .buttons-container {
-                flex-direction: column;
+            .brand-pill {
+                font-size: 1rem;
+                padding: 4px 12px;
             }
-            
-            .btn {
-                width: 100%;
+            .lang-dropdown {
+                font-size: 0.85rem;
+                padding: 6px 32px 6px 12px;
+            }
+            .stories-container {
+                grid-template-columns: 1fr;
+                padding: 0 12px;
+                gap: 20px;
+            }
+            .story-card {
+                padding: 20px 16px;
+            }
+            .story-card .story-title {
+                font-size: 1.2rem;
+            }
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 768px) {
+            .stories-container {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="background"></div>
-    
+
     <!-- Confetti Canvas -->
     <canvas id="confetti-canvas"></canvas>
-    
-    <!-- Easter Egg Message -->
-    <div class="easter-egg" id="easterEgg">
-        🎉 You are officially the King/Queen of Smiles! 😂
+
+    <!-- Floating Background Emojis -->
+    <span class="floating-emoji" style="top: 10%; left: 5%;">📚</span>
+    <span class="floating-emoji" style="top: 20%; right: 8%; animation-delay: 3s;">😂</span>
+    <span class="floating-emoji" style="bottom: 25%; left: 8%; animation-delay: 5s;">🎭</span>
+    <span class="floating-emoji" style="bottom: 15%; right: 6%; animation-delay: 2s;">🤪</span>
+    <span class="floating-emoji" style="top: 50%; left: 3%; animation-delay: 7s;">📖</span>
+    <span class="floating-emoji" style="top: 60%; right: 4%; animation-delay: 4s;">✨</span>
+
+    <!-- Sticky Top Navigation -->
+    <header class="top-bar">
+        <a href="#" class="brand-pill clickable" onclick="triggerCheer(); return false;">
+            <span>🤡</span> Laugh Zone
+        </a>
+        
+        <div class="lang-container">
+            <label for="languageSelect" class="lang-label">🌐 Language:</label>
+            <select id="languageSelect" class="lang-dropdown clickable" aria-label="Select Language">
+                <option value="en">🇺🇸 English</option>
+                <option value="bn">🇧🇩 বাংলা (Bangla)</option>
+                <option value="es">🇪🇸 Español (Spanish)</option>
+                <option value="pt">🇧🇷 Português (Portuguese)</option>
+                <option value="ps">🇦🇫 پښتو / دری (Afghan)</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <span class="emoji-burst">📖</span>
+        <h1 id="pageTitle">Funny Stories</h1>
+        <p class="subtitle" id="pageSubtitle">🤣 Side-splitting tales that will make you laugh till your tummy hurts!</p>
+    </section>
+
+    <!-- Stories Grid -->
+    <section class="stories-container" id="storiesContainer">
+        <!-- Stories will be injected here by JavaScript -->
+    </section>
+
+    <!-- Back Button -->
+    <div class="back-section">
+        <a href="#" class="back-btn clickable" onclick="goBack(); return false;">
+            <span>⬅️</span> Back to Laugh Zone
+        </a>
     </div>
 
-    <!-- Main Container -->
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <h1 class="title">😂 Welcome to Happy World 😂</h1>
-            <p class="subtitle">"If you're feeling sad, stay here for a minute and smile."</p>
-        </header>
+    <!-- Footer -->
+    <footer>
+        <p>🎪 Made with pure joy for gigglers worldwide. Laugh everyday!</p>
+    </footer>
 
-        <!-- Stats Bar -->
-        <div class="stats-bar">
-            <div class="stat-item">
-                <div class="stat-value" id="smileCounter">0</div>
-                <div class="stat-label">😊 Smiles Created</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="storyNumber">1</div>
-                <div class="stat-label">📖 Story Number</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="favoritesCount">0</div>
-                <div class="stat-label">❤️ Favorites</div>
-            </div>
-        </div>
-
-        <!-- Happy Level Progress Bar -->
-        <div class="progress-container">
-            <div class="progress-bar">
-                <div class="progress-fill" id="happyLevel" style="width: 0%">0%</div>
-            </div>
-        </div>
-
-        <!-- Random Quote -->
-        <div class="quote-box" id="quoteBox">
-            "A day without laughter is a day wasted." - Charlie Chaplin
-        </div>
-
-        <!-- Story Card -->
-        <div class="story-card" id="storyCard">
-            <h2 class="story-title" id="storyTitle">The Talking Parrot</h2>
-            <p class="story-content" id="storyContent">Loading your first story...</p>
-        </div>
-
-        <!-- Buttons -->
-        <div class="buttons-container">
-            <button class="btn btn-next" onclick="nextStory()">😂 Next Story</button>
-            <button class="btn btn-random" onclick="randomStory()">🎲 Random Story</button>
-            <button class="btn btn-favorite" onclick="addToFavorites()">❤️ Favorite</button>
-            <button class="btn btn-surprise" onclick="surpriseMe()">🌈 Surprise Me</button>
-        </div>
-
-        <!-- Footer -->
-        <footer class="footer">
-            Made to spread happiness ❤️
-        </footer>
-    </div>
-
+    <!-- ==========================================================================
+       JAVASCRIPT
+       ========================================================================== -->
     <script>
-        // ============================================
-        // STORIES DATABASE (100 Original Funny Stories)
-        // ============================================
-        const stories = [
-            {"title": "The Talking Parrot", "content": "Mr. Johnson bought a parrot that could speak five languages. Excited, he invited his friends over for a demonstration. 'Say hello in French!' he commanded. The parrot remained silent. 'Speak Spanish!' Still nothing. Embarrassed, Mr. Johnson whispered to the parrot, 'What's wrong?' The parrot replied, 'I'm on strike. You haven't given me my coffee this morning.' Everyone burst into laughter as Mr. Johnson rushed to make his bird a cappuccino."},
-            {"title": "The GPS Disaster", "content": "Sarah trusted her GPS completely during a road trip. 'Turn left in 500 feet,' it said confidently. She turned left... into a lake. As she waded out of her car, phone in hand, the GPS cheerfully announced, 'You have arrived at your destination: Swimming Pool.' Her friend called from behind, 'Actually, I think you just invented a new tourist attraction!' Sarah had to admit, the view was quite refreshing."},
-            {"title": "The Cooking Experiment", "content": "Tom decided to impress his date by cooking dinner. He followed a recipe for 'simple pasta' but accidentally used salt instead of sugar in the dessert. When his date took a bite of the chocolate cake, her eyes widened. 'This is... interesting,' she said diplomatically. Tom tasted it and spat it out immediately. They ended up ordering pizza and laughing about it all night. Best first date ever!"},
-            {"title": "The Dog's Secret Life", "content": "Mrs. Peterson installed a camera to see what her dog did while she was at work. She expected napping or chewing shoes. Instead, she found her golden retriever sitting at her computer, pawing at the keyboard, and occasionally barking at the screen. The vet later explained, 'He's probably trying to order more treats online.' Mrs. Peterson changed her password immediately and bought extra dog biscuits."},
-            {"title": "The Yoga Class Mix-up", "content": "Bob joined a yoga class to get fit. During the final meditation, the instructor said, 'Find your inner peace.' Bob fell asleep and started snoring loudly. When he woke up, everyone was staring at him. The instructor smiled and said, 'Well, you certainly found your inner snooze.' Bob became the most relaxed person in class, though not exactly in the way intended."},
-            {"title": "The Selfie Gone Wrong", "content": "Lisa tried to take the perfect selfie at the museum. She posed dramatically next to a dinosaur skeleton. Just as she clicked, a janitor walked by with a mop and bucket, appearing in the background as if he was cleaning the T-Rex's teeth. The photo went viral with the caption: 'Even dinosaurs need dental hygiene.' Lisa became an accidental comedy star."},
-            {"title": "The Grocery Store Adventure", "content": "James made a shopping list but forgot it at home. He wandered the aisles trying to remember what he needed. After 20 minutes, he realized he was standing in the pet food section, holding cat food, despite not owning a cat. He bought it anyway, thinking maybe a stray cat would appreciate his confusion. The next day, a neighbor's cat showed up at his door. Coincidence? James thinks not."},
-            {"title": "The Dance Recital", "content": "Emma signed up for a dance class without telling anyone. At the recital, she was so nervous she forgot all the steps. Instead of panicking, she started doing the chicken dance. The audience loved it so much they joined in. The instructor later said it was the most successful performance ever. Emma now teaches 'freestyle confidence' classes."},
-            {"title": "The Weather App Betrayal", "content": "Mark checked his weather app before leaving home. 'Sunny, 75 degrees,' it promised. He wore shorts and a t-shirt. Halfway to work, it started hailing. By the time he arrived, he looked like he'd been in a snowball fight. His coworker asked, 'Did you check the weather?' Mark replied, 'Yes, I checked the weather from last Tuesday.' They both laughed as Mark dried off with paper towels."},
-            {"title": "The Library Incident", "content": "Sophie was studying quietly in the library when her stomach growled louder than a lion. Everyone turned to look. Mortified, she whispered, 'Sorry, that wasn't me.' Just then, the librarian's stomach growled even louder. The librarian shrugged and said, 'At least yours has better timing.' The entire study floor erupted in suppressed giggles. Sophie never felt less alone in her embarrassment."},
-            {"title": "The Smart Fridge", "content": "Dad bought a smart fridge that could order groceries automatically. One morning, it ordered 50 pounds of ice cream because it detected 'emotional eating patterns.' The delivery driver asked, 'Party tonight?' Dad explained the situation, and they both laughed while storing 20 gallons of ice cream. Now the whole neighborhood comes over for 'fridge malfunction parties.'"},
-            {"title": "The Karaoke Catastrophe", "content": "Mike volunteered to sing at karaoke night, claiming he was 'pretty good.' He chose a romantic ballad but forgot the words halfway through. Instead of stopping, he made up new lyrics about his love for pizza. The crowd cheered louder than they had for any actual singer. Mike now performs 'Pizza Love' at every opportunity."},
-            {"title": "The Plant Parent", "content": "Jennifer bought a cactus because they're 'impossible to kill.' Two weeks later, it died. She researched extensively and discovered she had been watering it daily. The plant store owner gently explained, 'Cacti are like teenagers—they ignore you until you stop bothering them.' Jennifer named her next cactus 'Independence' and only watered it monthly."},
-            {"title": "The Elevator Music", "content": "Stuck in an elevator for 30 minutes, strangers started bonding over their playlist suggestions. One person suggested heavy metal, another wanted classical. They compromised on Disney songs. By the time rescue arrived, they were singing 'Let It Go' together. They created a group chat called 'Elevator Choir' and meet monthly for karaoke."},
-            {"title": "The Autocorrect Affair", "content": "Rachel texted her boss: 'I'll duck you later' instead of 'I'll check you later.' Panicking, she sent five corrections, each with worse typos. Her boss replied: 'I appreciate your dedication to waterfowl, but let's stick to email.' Rachel learned to proofread twice and now keeps a rubber duck on her desk as a reminder."},
-            {"title": "The Gym Membership", "content": "Carlos joined a gym with great intentions. On day one, he spent 45 minutes figuring out how to use the treadmill. He accidentally set it to maximum speed and held on for dear life. The trainer helped him down, saying, 'That's one way to start cardio.' Carlos now walks proudly at speed 3 and considers it a victory."},
-            {"title": "The Birthday Surprise", "content": "Friends planned a surprise party for Amy but forgot to tell her to stay home. She went shopping instead. They waited three hours with cake melting. When Amy finally returned, she found 20 people hiding in her living room. 'Surprise!' they yelled. Amy screamed, dropped her bags, and said, 'You scared me more than my birthday aging did!'"},
-            {"title": "The Tech Support Call", "content": "Grandma called tech support because her computer was 'making funny noises.' The technician talked her through checking everything. 'Is it plugged in?' he asked. 'Of course!' she replied indignantly. After 30 minutes, they discovered the noise was coming from her cat sleeping on the keyboard. Grandma named her cat 'Tech Support' afterward."},
-            {"title": "The Parking Spot War", "content": "Two drivers spotted the same parking space at the mall. They circled each other like sharks. Finally, they both stopped, rolled down windows, and stared. One driver said, 'Rock, paper, scissors?' They played, and the winner got the spot. The loser parked around the corner and admitted it was the fairest parking dispute ever."},
-            {"title": "The Cooking Show Dream", "content": "Maria auditioned for a cooking show with her famous lasagna. Mid-presentation, she realized she'd forgotten to turn on the oven. The judges watched her panic, then laugh, then order takeout. They said, 'Your honesty is refreshing, and your taste in pizza is excellent.' Maria didn't get the show but got a pizza sponsorship deal."},
-            {"title": "The Lost Keys", "content": "David spent an hour searching for his keys. He checked every pocket, bag, and surface. Finally, he called his wife in frustration. 'They're in your hand,' she said calmly. David looked down. There they were. He'd been holding them the entire time while searching. His wife now keeps a photo of that moment as her phone wallpaper."},
-            {"title": "The Diet Plan", "content": "Susan started a new diet on Monday. By Tuesday, she'd eaten her weight in salad. Wednesday brought cravings. Thursday, she baked cookies 'for the office.' Friday, she ate half the batch herself. Saturday, she declared it a 'cheat week.' Sunday, she started planning next week's diet. The cycle continues, but at least she's gotten really good at baking."},
-            {"title": "The Wrong Number", "content": "Tom accidentally texted a stranger: 'Pick up milk on your way home.' The stranger replied: 'Wrong number, but I'll grab some anyway.' They started texting regularly, sharing grocery lists and life updates. They've never met in person but consider each other best friends. Tom's actual spouse is slightly jealous of their milk-based friendship."},
-            {"title": "The Haircut Disaster", "content": "Jessica asked for 'just a trim.' The barber misunderstood and gave her a pixie cut. Shocked, Jessica looked in the mirror and started crying. Then she laughed. Then she loved it. Six months later, she still has short hair and tells everyone, 'Best accident ever.' The barber keeps her photo as proof that mistakes can be beautiful."},
-            {"title": "The Online Shopping Spree", "content": "Emily went online shopping for socks. Three hours later, her cart contained: 12 pairs of socks, a kayak, a telescope, and a lifetime supply of gummy bears. She deleted everything except the socks. The next day, she wondered why she didn't buy the kayak. Her bank account breathed a sigh of relief."},
-            {"title": "The Pet Rock", "content": "Billy's science project required caring for something alive for a month. He chose a rock, named it Rocky, and documented its 'behavior.' His teacher was confused but impressed by Billy's creativity. Rocky received an A+ for 'most consistent pet.' Billy now collects rocks and insists they have personalities."},
-            {"title": "The Coffee Shop Mix-up", "content": "Anna ordered a vanilla latte. The barista handed her a drink labeled 'Steve.' Anna drank it anyway. It was delicious. She went back the next day and ordered 'whatever Steve had.' The barista remembered her and made the same drink. Anna and Steve (whoever he is) now share a mysterious coffee connection."},
-            {"title": "The Fitness Tracker Lie", "content": "Jake strapped his fitness tracker to his dog to boost his step count. It worked brilliantly—his dog ran circles while Jake napped. His friends congratulated him on his 'amazing dedication.' Guilty, Jake confessed. His friends were more impressed by his creativity than offended by his laziness. The dog got extra treats."},
-            {"title": "The Recipe Translation", "content": "Maria tried following a recipe written in another language. She guessed that 'una pizca' meant 'a lot' instead of 'a pinch.' Her soup could cure diseases or melt spoons. Her family ate it bravely, praising her 'bold flavors.' Maria now labels all her spices in English and includes warning labels."},
-            {"title": "The Neighbor's WiFi", "content": "Sam's internet went down during an important video call. Desperate, he connected to his neighbor's WiFi named 'FBI Surveillance Van.' He completed his call successfully. The next day, he baked cookies and left them at his neighbor's door with a thank-you note. The neighbor still doesn't know Sam borrowed their internet."},
-            {"title": "The Laundry Mystery", "content": "Lisa put white clothes in the wash. They came out pink. She searched everywhere for the culprit. Finally, she found a red sock hidden in her jacket pocket. Her white shirts were now a lovely shade of salmon. She embraced it and started a 'pink wardrobe challenge.' Her friends thought it was a bold fashion statement."},
-            {"title": "The Silent Treatment", "content": "After an argument, Tim gave his roommate the silent treatment. Day one: awkward. Day two: weird. Day three: Tim realized he missed talking. He broke the silence by asking, 'Want pizza?' His roommate said yes. They ate pizza and never discussed the argument again. Some conflicts resolve themselves with carbohydrates."},
-            {"title": "The Magic Trick Fail", "content": "Dave practiced a card trick for weeks. He finally performed it for friends. The card stuck to his hand. He shook his hand frantically. The card flew across the room and landed in someone's drink. Everyone applauded the 'innovative approach.' Dave now claims it was intentional all along."},
-            {"title": "The Early Bird", "content": "Sarah decided to become a morning person. She set five alarms. She slept through all of them. Her cat walked across her face at 6 AM. Defeated, Sarah accepted she was a night owl. She now does her best work at midnight and considers cats her personal alarm clocks."},
-            {"title": "The Gift Wrap Struggle", "content": "Kevin tried wrapping a present elegantly. The tape stuck to everything except the paper. The bow looked like a tangled mess. He gave up and put it in a bag. His friend said, 'This is the best-wrapped gift ever!' Kevin realized presentation matters less than thoughtfulness. He still buys gift bags exclusively."},
-            {"title": "The Language App", "content": "Nina downloaded a language learning app. She studied Spanish daily for a month. On vacation, she confidently ordered food. The waiter responded in rapid Spanish. Nina smiled and nodded, having no idea what he said. She received chicken instead of fish. She ate it happily, claiming cultural immersion."},
-            {"title": "The Umbrella Incident", "content": "It started raining heavily. John opened his umbrella triumphantly. A gust of wind turned it inside out. He struggled with it for five minutes before giving up. He ran to his car, completely soaked. His coworker asked, 'Where's your umbrella?' John replied, 'It's experiencing existential issues.'"},
-            {"title": "The Cooking Timer", "content": "Rachel set a timer for her cookies. She forgot about them. The smoke alarm announced their arrival. She pulled out charcoal briquettes disguised as chocolate chip cookies. Her dog ate them enthusiastically. Rachel now sets three timers and checks the oven every two minutes."},
-            {"title": "The Wrong Bus", "content": "Mike boarded a bus heading downtown. Halfway there, he realized it was going to the airport. He stayed on, curious. He watched planes take off for an hour. The driver noticed and offered him a free ride back. Mike said it was the best spontaneous field trip ever."},
-            {"title": "The Password Problem", "content": "Jennifer created a 'secure' password: 20 characters with symbols. She wrote it down and lost the paper. She reset her password to 'password123.' Her IT department sent a stern email. Jennifer replied with a meme about password complexity. They both laughed and updated the security guidelines."},
-            {"title": "The Garden Gnome", "content": "Tom placed a garden gnome as a joke. Neighbors started adding their own. Within a month, Tom's yard had 50 gnomes hosting tea parties. The local newspaper featured it. Tom embraced his role as 'Gnome Mayor.' He now organizes monthly gnome festivals. Tourism increased significantly."},
-            {"title": "The Elevator Small Talk", "content": "Strangers in an elevator avoided eye contact. One person sneezed. Another said, 'Bless you.' Ice broken. They discussed weather, traffic, and lunch plans. By the ground floor, they exchanged numbers. They meet weekly for coffee. All because of one sneeze and basic human decency."},
-            {"title": "The DIY Project", "content": "Amy watched a YouTube tutorial for building shelves. She gathered tools and materials. Three hours later, she had a pile of wood and confusion. She called a professional. He fixed it in 20 minutes. Amy learned some skills require practice. She now hires experts and watches them work."},
-            {"title": "The Forgotten Name", "content": "Chris met someone at a party. They chatted for an hour. Chris couldn't remember their name. He avoided using names entirely. At goodbye, the person said, 'Great meeting you, Chris!' Chris panicked and said, 'You too, uh... friend!' They laughed and exchanged contacts properly next time."},
-            {"title": "The Rainy Day Plan", "content": "The picnic was rained out. Instead of canceling, everyone brought blankets indoors. They had an indoor picnic with sandwiches and stories. Kids built forts. Adults shared memories. It became a tradition. Rainy days are now anticipated more than sunny ones."},
-            {"title": "The Auto-Reply Accident", "content": "Mark set an auto-reply for vacation. He forgot to turn it off. For three weeks, clients received: 'I'm relaxing on a beach!' Mark was actually at his desk, stressed. Clients started sending beach photos. Mark pretended to be on vacation while working. Productivity somehow increased."},
-            {"title": "The Wrong Floor", "content": "Laura exited the elevator on the wrong floor. She walked confidently down the hallway. Realized her mistake. Instead of turning back, she explored. Found a rooftop garden. Sat there for an hour. Best accidental discovery ever. She now takes wrong floors intentionally sometimes."},
-            {"title": "The Singing Shower", "content": "Ben sang loudly in the shower. His neighbor knocked on the wall. Ben stopped, embarrassed. The neighbor yelled, 'Don't stop! That was amazing!' Ben continued singing. They developed a routine. Ben sings, neighbor applauds. Best bathroom acoustics in the building."},
-            {"title": "The Recipe Swap", "content": "Neighbors exchanged recipes. One recipe said 'add salt to taste.' They added too much. The dish was inedible. They ordered pizza together. Laughed about culinary failures. Started a monthly cooking club. Mistakes became bonding experiences. Pizza remains the backup plan."},
-            {"title": "The Lost Tourist", "content": "A tourist asked for directions. Local gave detailed instructions. Tourist looked confused. Local drew a map. Tourist still looked lost. Local walked them there personally. They became friends. Tourist sent postcards from home. Best tour guide experience for both."},
-            {"title": "The Phone Battery", "content": "Phone at 1%. Emergency! Sarah rushed to find a charger. Couldn't find one. Accepted fate. Put phone away. Read a book. Had a great afternoon. Realized she didn't miss her phone. Charged it that evening. Uses it less now. Best battery death ever."},
-            {"title": "The Costume Party", "content": "Invitation said 'come as your favorite food.' Alex dressed as pizza. Arrived to find everyone in elegant costumes. Misunderstood theme. Stayed anyway. Became party mascot. Won 'most creative' award. Pizza costume now hangs in closet as trophy."},
-            {"title": "The Morning Rush", "content": "Overslept by 30 minutes. Rushed through morning routine. Wore mismatched socks. Forgot lunch. Ran to bus. Made it barely. Arrived at work disheveled. Coworkers complimented 'eclectic style.' Decided mismatched socks are trendy. Never rushes mornings again."},
-            {"title": "The Book Club", "content": "Joined book club to read more. First book was 800 pages. Didn't finish. Pretended to have read it. Discussion revealed nobody else finished either. Group decided to read shorter books. Bonded over literary failures. Best book club decision ever."},
-            {"title": "The Weather Prediction", "content": "App predicted sunshine. Brought sunglasses. Rained all day. App predicted rain next day. Brought umbrella. Sunny and warm. Stopped trusting apps. Looks outside instead. More accurate. Apps hurt feelings with wrong predictions."},
-            {"title": "The Cooking Competition", "content": "Entered amateur cooking contest. Made simple pasta. Judges loved it. Won second place. First place made molecular gastronomy. Simple won hearts. Complex won technical points. Learned simplicity has value. Cooks simply ever since."},
-            {"title": "The Lost Remote", "content": "Remote disappeared. Searched everywhere. Couch cushions, under furniture, fridge (why?). Gave up. Bought universal remote. Old remote appeared in coat pocket. Had two remotes now. Kept both. One for backup. Remote mysteries remain unsolved."},
-            {"title": "The First Date Nerves", "content": "Nervous for first date. Practiced conversation. Spilled water on shirt. Apologized profusely. Date laughed and spilled their drink too. Ice broken. Relaxed. Had wonderful time. Messiness creates connections. Perfection is overrated."},
-            {"title": "The Group Photo", "content": "Trying to take group photo. Someone blinks. Someone looks away. Someone makes funny face. Thirty attempts later. Perfect photo achieved. Everyone looks natural. Posted online. Gets most likes. Chaos creates perfection sometimes."},
-            {"title": "The Midnight Snack", "content": "Woke up hungry at 2 AM. Made sandwich in dark. Used wrong ingredients. Peanut butter and pickles. Surprisingly delicious. New favorite combination. Friends judge harshly. Don't care. Culinary genius recognized by self only."},
-            {"title": "The Yoga Retreat", "content": "Signed up for yoga retreat. Expected peace and tranquility. Got mosquito bites and rain. Meditated in ponchos. Laughed through discomfort. Made lifelong friends. Worst conditions, best memories. Nature doesn't care about Instagram aesthetics."},
-            {"title": "The Wrong Train", "content": "Boarded wrong train. Realized mid-journey. Could transfer back. Decided to continue. Explored unknown town. Found amazing cafe. Met interesting locals. Best travel mistake ever. Sometimes wrong turns lead right."},
-            {"title": "The Bake Sale", "content": "Volunteered for school bake sale. Burned first batch. Second batch too sweet. Third batch perfect. Sold out immediately. Parents asked for recipe. Shared secret: persistence. Burnt offerings taught valuable lessons. Success tastes sweeter after failure."},
-            {"title": "The Office Plant", "content": "Bought office plant for morale. Named it Steve. Talked to Steve daily. Colleagues joined conversations. Steve became team mascot. Plant thrived on attention. Office productivity increased. Science can't explain it. Steve works magic."},
-            {"title": "The Karaoke Duo", "content": "Dragged friend to karaoke. Both terrified. Sang together for courage. Horrible harmonies. Crowd loved enthusiasm. Requested encore. Gained confidence. Now regular performers. Fear conquered through friendship and terrible singing."},
-            {"title": "The Road Trip Playlist", "content": "Created perfect road trip playlist. Driver hated every song. Passenger loved them all. Compromised with classical music. Both fell asleep. Woke up at destination. Best drive ever. Silence appreciated more than music sometimes."},
-            {"title": "The Art Class", "content": "Joined painting class. Expected masterpiece. Created abstract blob. Teacher called it 'brave.' Classmates agreed. Framed it anyway. Hangs in living room. Guests ask about meaning. Say it represents chaos. Technically true."},
-            {"title": "The Camping Trip", "content": "First camping experience. Forgot tent poles. Slept in car. Heard owls all night. Scared initially. Found it peaceful. Stars visible clearly. No city lights. Nature's beauty appreciated. Car camping counts as adventure."},
-            {"title": "The Volunteer Work", "content": "Volunteered at animal shelter. Expected cute puppies. Got grumpy old cats. Fell in love with cranky feline. Adopted immediately. Cat rules household now. Volunteer work led to permanent resident. Best decision ever made."},
-            {"title": "The Language Barrier", "content": "Traveled to country without knowing language. Pointed at menu items. Received mystery dishes. Adventures in dining. Some delicious, some questionable. Laughed through confusion. Locals appreciated effort. Food transcends language barriers beautifully."},
-            {"title": "The Marathon Attempt", "content": "Trained for marathon for months. Race day arrived. Ran first mile proudly. Walked second mile. Jogged third. Finished walking. Medal still earned. Participation counts. Pride in finishing, however slow. Next year will be faster. Maybe."},
-            {"title": "The Photography Class", "content": "Enrolled in photography course. Camera seemed complicated. Took blurry photos initially. Instructor patient. Learned basics slowly. First clear photo: sunset. Felt accomplished. Photography hobby born. Blurry beginnings lead to clear endings."},
-            {"title": "The Community Garden", "content": "Joined community garden plot. Planted tomatoes eagerly. Birds ate seedlings. Replanted with netting. Grew successfully. Shared harvest with neighbors. Community strengthened through gardening. Vegetables taste better when shared."},
-            {"title": "The Dance Lesson", "content": "Partner dance class signup. No partner available. Instructor paired randomly. Awkward first steps. Laughter broke tension. Learned together. Friendship formed through missteps. Dance partners for life. Romance optional, fun guaranteed."},
-            {"title": "The Writing Workshop", "content": "Attended creative writing workshop. Shared first story. Nervous presentation. Feedback surprisingly positive. Encouragement received. Continued writing. Published locally eventually. Confidence built through community support. Words connect people powerfully."},
-            {"title": "The Farmers Market", "content": "Visited farmers market first time. Overwhelmed by choices. Bought everything appealing. Kitchen overflowed with produce. Ate vegetables for weeks. Healthy inadvertently. Supporting local farmers feels good. Markets become weekly tradition."},
-            {"title": "The Board Game Night", "content": "Organized board game evening. Rules misunderstood by all. Arguments ensued playfully. Laughter dominated evening. Winner irrelevant. Memories created abundantly. Monthly game nights established. Competition secondary to connection."},
-            {"title": "The Sunrise Hike", "content": "Woke up at 4 AM for sunrise hike. Exhausted initially. Reached summit as sun rose. Spectacular views rewarded effort. Photos captured beautifully. Tired but fulfilled. Early rising worthwhile occasionally. Nature's alarm clock superior."},
-            {"title": "The Potluck Dinner", "content": "Hosted potluck dinner. Guests brought diverse dishes. Unexpected flavor combinations. Culinary adventures enjoyed. Recipes exchanged freely. Cultural appreciation through food. Community bonded over meals. Diversity celebrated deliciously."},
-            {"title": "The Stargazing Night", "content": "Planned stargazing event. Clouds covered sky initially. Waited patiently together. Clouds parted eventually. Stars revealed magnificently. Wonder shared collectively. Universe appreciated jointly. Patience rewarded astronomically. Best night sky viewing ever."},
-            {"title": "The Piano Lessons", "content": "Started piano lessons as adult. Fingers felt clumsy initially. Practiced scales daily. Progress slow but steady. First complete song mastered. Neighbors complained about repetitive practice. Played louder proudly. Musical journey begun enthusiastically. Age irrelevant when learning."},
-            {"title": "The Beach Day", "content": "Planned perfect beach day. Forgot sunscreen completely. Became lobster red painfully. Aloe vera applied generously. Lesson learned permanently. Sunscreen now packed religiously. Painful education effective. Beach days enjoyed responsibly thereafter. Redness faded, wisdom remained."},
-            {"title": "The Bookstore Visit", "content": "Entered bookstore for one book. Left with seven books. Budget exceeded significantly. Worth every penny though. Reading list grew longer. Happiness increased proportionally. Bookstores dangerous financially. Joy invaluable practically. Will return inevitably soon."},
-            {"title": "The Cooking Disaster", "content": "Attempted soufflé for dinner. Collapsed immediately upon removal. Looked like pancake unfortunately. Tasted delicious actually. Guests complimented creativity. Called it deconstructed soufflé. Technical failure, taste success. Confidence restored completely. Culinary experiments continued bravely."},
-            {"title": "The Morning Walk", "content": "Started morning walking routine. Fresh air invigorating. Birds singing cheerfully. Neighborhood noticed differently. Discovered hidden gardens. Met friendly neighbors. Routine became ritual. Mornings appreciated newly. Health improved gradually. Simple pleasures recognized fully."},
-            {"title": "The Puzzle Night", "content": "Bought thousand-piece puzzle. Underestimated difficulty significantly. Worked on it weekly. Months passed slowly. Finally completed triumphantly. Framed masterpiece proudly. Accomplishment felt enormous. Patience rewarded ultimately. Next puzzle purchased immediately. Addiction acknowledged happily."},
-            {"title": "The Rainy Afternoon", "content": "Rain trapped everyone indoors. Board games emerged from closets. Laughter filled living room. Hot chocolate prepared warmly. Stories shared freely. Connections deepened naturally. Rain appreciated unexpectedly. Indoor activities rediscovered joyfully. Weather blessings recognized gratefully. Cozy memories created abundantly."},
-            {"title": "The Gardening Mistake", "content": "Planted flowers in wrong season. Nothing grew initially. Researched extensively afterward. Replanted correctly next time. Garden bloomed beautifully. Patience learned thoroughly. Nature's timing respected. Gardening skills developed gradually. Beauty worth waiting for. Green thumb earned eventually."},
-            {"title": "The Concert Experience", "content": "Attended first live concert. Energy overwhelming positively. Crowd sang together. Music felt different live. Memories created vividly. Voice lost from singing. Worth every hoarse moment. Live music addiction began. Concerts attended regularly since. Shared experiences cherished deeply."},
-            {"title": "The Volunteer Adventure", "content": "Volunteered at food bank. Expected simple tasking. Received life perspective instead. Gratitude learned profoundly. Community service rewarding unexpectedly. Regular volunteering committed. Helping others fulfilling personally. Privilege recognized humbly. Service continues willingly. Hearts changed permanently."},
-            {"title": "The Roadside Attraction", "content": "Saw weird roadside sign. Stopped curiosity overcoming caution. World's largest teapot awaited. Photo taken enthusiastically. Story gained uniquely. Detours worthwhile occasionally. Quirky discoveries appreciated. Travel enriched unpredictably. Memories made unconventionally. Adventures found unexpectedly."},
-            {"title": "The Library Discovery", "content": "Wandered library aisles aimlessly. Found unexpected book section. Discovered new genre love. Reading horizons expanded wonderfully. Librarian recommendations followed. Literary adventures multiplied. Knowledge pursued eagerly. Imagination stimulated continuously. Books friends forever. Learning never ends."},
-            {"title": "The Picnic Preparation", "content": "Prepared elaborate picnic basket. Ants discovered feast first. Shared lunch unwillingly. Laughed at situation. Relocated picnic spot. Enjoyed remaining food. Nature participated unexpectedly. Outdoor dining educational. Flexibility practiced successfully. Picnics planned carefully henceforth."},
-            {"title": "The Craft Fair", "content": "Visited local craft fair. Handmade items admired. Artisans met personally. Stories heard behind creations. Purchases made thoughtfully. Supporting local valued. Creativity celebrated communally. Unique treasures found. Mass production rejected. Handcrafted appreciation grown."},
-            {"title": "The Sunset Watch", "content": "Climbed hill for sunset. View spectacular beyond expectation. Colors painted sky magnificently. Silence shared peacefully. Moment captured mentally. Photos inadequate truly. Presence appreciated fully. Nature's beauty humbling. Gratitude felt deeply. Sunsets watched regularly since."},
-            {"title": "The Recipe Experiment", "content": "Combined two recipes randomly. Outcome uncertain completely. Taste testing nervously. Surprisingly delicious result. Culinary creativity validated. Experimentation encouraged personally. Kitchen confidence boosted. New signature dish created. Friends requested recipe. Accidental genius celebrated."},
-            {"title": "The Neighborhood Walk", "content": "Walked neighborhood without destination. Noticed details previously ignored. Beautiful gardens discovered. Friendly waves exchanged. Community felt stronger. Belonging experienced genuinely. Exercise incidental benefit. Connection primary reward. Home appreciated newly. Walking becomes meditation."},
-            {"title": "The Memory Box", "content": "Found old memory box. Treasures uncovered nostalgically. Letters reread emotionally. Photos reminisced fondly. Past revisited gently. Growth recognized gratefully. Journey appreciated fully. Present valued more. Future anticipated excitedly. Memories preserved lovingly."},
-            {"title": "The Kindness Chain", "content": "Paid for stranger's coffee. Stranger paid forward. Chain continued surprisingly. News spread locally. Community inspired positively. Kindness contagious proved. Generosity multiplied exponentially. Humanity restored optimistically. Small acts matter. Ripple effects powerful."},
-            {"title": "The Happy Ending", "content": "Life filled with moments. Some challenging, many joyful. Laughter heals wounds. Friends support always. Love surrounds constantly. Gratitude changes perspective. Happiness chosen daily. Smile shared freely. World brightened individually. Joy multiplies infinitely. Stay happy always!"}
-        ];
-
-        // ============================================
-        // HAPPY QUOTES
-        // ============================================
-        const quotes = [
-            "A day without laughter is a day wasted. - Charlie Chaplin",
-            "Happiness is not something ready-made. It comes from your own actions. - Dalai Lama",
-            "The best way to cheer yourself up is to try to cheer somebody else up. - Mark Twain",
-            "Keep your face always toward the sunshine—and shadows will fall behind you. - Walt Whitman",
-            "Happiness is when what you think, what you say, and what you do are in harmony. - Mahatma Gandhi",
-            "The purpose of our lives is to be happy. - Dalai Lama",
-            "Count your age by friends, not years. Count your life by smiles, not tears. - John Lennon",
-            "Happiness is not a goal; it is a by-product. - Eleanor Roosevelt",
-            "The happiest people don't have the best of everything, they make the best of everything. - Unknown",
-            "Smile, it's free therapy. - Unknown",
-            "Be happy for this moment. This moment is your life. - Omar Khayyam",
-            "Happiness depends upon ourselves. - Aristotle",
-            "The greatest happiness you can give is a kind word. - Unknown",
-            "Joy is not in things; it is in us. - Richard Wagner",
-            "Happiness is a warm puppy. - Charles Schulz"
-        ];
-
-        // ============================================
-        // STATE MANAGEMENT
-        // ============================================
-        let currentStoryIndex = 0;
-        let smileCount = 0;
-        let favoritesCount = 0;
-        let nextStoryClicks = 0;
-        let favorites = [];
-
-        // ============================================
-        // INITIALIZE PAGE
-        // ============================================
-        window.onload = function() {
-            createFloatingElements();
-            displayStory(0);
-            updateStats();
-            startMouseSparkle();
+        /**
+         * MULTI-LANGUAGE DICTIONARY
+         */
+        const TRANSLATIONS = {
+            en: {
+                pageTitle: "Funny Stories",
+                pageSubtitle: "🤣 Side-splitting tales that will make you laugh till your tummy hurts!",
+                stories: [
+                    { emoji: "🦆", title: "The Duck Who Thought He Was a Dog", 
+                      content: "A duckling was raised by a family of golden retrievers. He learned to bark, fetch sticks, and even tried to wag his tail. One day, he saw a pond and thought, 'What is this magic blue ground?'. He waddled in and discovered his true identity. Now he identifies as a 'dog-duck' and still barks at mailmen." },
+                    { emoji: "🍕", title: "The Pizza That Changed My Life", 
+                      content: "I ordered a pizza online. When it arrived, the delivery guy said, 'This pizza has a message for you.' I opened the box and the pepperonis spelled out 'YOU ARE AWESOME'. I cried. Then I ate the message. Best pizza ever. I still think about that pizza every day." },
+                    { emoji: "🐱", title: "Cat vs. The Vacuum Cleaner", 
+                      content: "My cat, Sir Fluffington, declared war on the vacuum cleaner. He would hiss, puff up, and charge at it. One day, the vacuum cleaner broke. Sir Fluffington sat victoriously on top of it for three days, guarding his fallen enemy. We bought a new one. The war continues." },
+                    { emoji: "🚽", title: "The Toilet Paper Incident", 
+                      content: "I once ran out of toilet paper during a Zoom meeting. I had to waddle sideways to the closet, grab a new roll, and waddle back. My boss asked, 'What are you doing?' I said, 'Just getting some... documents.' I'll never live it down." },
+                    { emoji: "🐶", title: "My Dog Thinks He's a Human", 
+                      content: "My golden retriever, Buddy, sits at the dinner table with us. He uses a fork (poorly), watches TV (especially animal commercials), and even tries to read the newspaper (upside down). Yesterday, he tried to pay for groceries with a leaf. We're worried." },
+                    { emoji: "🍌", title: "The Banana Phone Prank", 
+                      content: "I called my friend with a banana to my ear. He answered and I said, 'Hello, this is banana speaking.' He hung up. I called back with the same banana. He didn't answer. So I texted him: 'Sorry, my banana lost service.' We're not friends anymore." },
+                    { emoji: "🦷", title: "The Dentist Who Made Me Laugh", 
+                      content: "I went to the dentist with a toothache. He said, 'Don't worry, I'll have you laughing in no time.' I asked, 'How?' He replied, 'I'll tell you a joke while I drill!' He told me a pun so bad that I laughed, and my tooth fell out on its own. Genius." },
+                    { emoji: "🚗", title: "The GPS Lady Is My Nemesis", 
+                      content: "My GPS says 'In 500 feet, turn left.' I turn left immediately. She says, 'Recalculating.' I yell, 'You said turn left!' She replies, 'In 500 feet, turn left.' We have a toxic relationship. She's always right. Literally." },
+                    { emoji: "🍔", title: "The Burger That Made Me Cry", 
+                      content: "I ordered a double cheeseburger. It was so beautiful that I started crying. My friend asked, 'Are you okay?' I sobbed, 'It's just... so perfect.' I took a photo, posted it on Instagram, and then devoured it in 30 seconds. Best burger of my life." },
+                    { emoji: "🐧", title: "The Penguin at the Mall", 
+                      content: "I saw a guy in a penguin costume at the mall. He was giving out free hugs. I hugged him, and he said in a squeaky voice, 'You're my favorite human.' I asked why. He replied, 'Because you didn't try to feed me fish.' I still think about that penguin." },
+                    { emoji: "🎈", title: "The Balloon That Wouldn't Pop", 
+                      content: "I got a balloon at a party. I tried to pop it by sitting on it. It didn't pop. I threw it against the wall. It bounced back. I even tried to stab it with a fork. The fork bent. That balloon is still alive somewhere, probably ruling a small country now." },
+                    { emoji: "🧦", title: "The Sock That Disappeared", 
+                      content: "I put two socks in the washing machine. Only one came out. I searched everywhere. Three weeks later, I found it in the freezer. I have no explanation. The sock still looks at me funny. I think it knows something I don't." }
+                ]
+            },
+            bn: {
+                pageTitle: "মজার গল্প",
+                pageSubtitle: "🤣 পেটে খিল ধরা গল্প যা শুনলে হাসি থামবে না!",
+                stories: [
+                    { emoji: "🦆", title: "যে হাঁস নিজেকে কুকুর ভাবত", 
+                      content: "একটি ছোট হাঁসকে গোল্ডেন রিট্রিভার পরিবার বড় করেছিল। সে ঘেউ ঘেউ করতে, লাঠি আনতে এবং লেজ নাড়াতে শিখল। একদিন সে একটি পুকুর দেখে ভাবল, 'এই জাদুকরী নীল জমি কি?' সে পুকুরে হাঁটল এবং নিজের পরিচয় আবিষ্কার করল। এখন সে নিজেকে 'কুকুর-হাঁস' পরিচয় দেয় এবং এখনও ডাকওয়ালাদের দিকে ঘেউ ঘেউ করে।" },
+                    { emoji: "🍕", title: "যে পিৎজা আমার জীবন বদলে দিয়েছিল", 
+                      content: "আমি অনলাইনে একটি পিৎজা অর্ডার করেছিলাম। যখন তা এল, ডেলিভারি লোক বলল, 'এই পিৎজার জন্য আপনার বার্তা আছে।' আমি বক্স খুললাম এবং পেপারোনি গুলো বানিয়েছিল 'তুমি অসাধারণ'। আমি কেঁদে ফেললাম। তারপর বার্তাটি খেয়ে ফেললাম। সেরা পিৎজা। আমি এখনও সেই পিৎজার কথা ভাবি।" },
+                    { emoji: "🐱", title: "বিড়াল বনাম ভ্যাকুয়াম ক্লিনার", 
+                      content: "আমার বিড়াল স্যার ফ্লাফিংটন ভ্যাকুয়াম ক্লিনারের বিরুদ্ধে যুদ্ধ ঘোষণা করেছিল। সে হিস হিস করত, ফুলে উঠত এবং তাকে আক্রমণ করত। একদিন ভ্যাকুয়াম ক্লিনার ভেঙে গেল। স্যার ফ্লাফিংটন তিন দিন ধরে তার পরাজিত শত্রুর উপর বিজয়ী হয়ে বসে রইল। আমরা নতুন কিনলাম। যুদ্ধ চলতেই থাকে।" },
+                    { emoji: "🚽", title: "টয়লেট পেপার কাণ্ড", 
+                      content: "একবার জুম মিটিংয়ের সময় আমার টয়লেট পেপার শেষ হয়ে গেল। আমাকে পাশের ক্লোজেটে হেঁটে যেতে, নতুন রোল আনতে, এবং ফিরে আসতে হয়েছিল। আমার বস জিজ্ঞেস করলেন, 'কি করছ?' আমি বললাম, 'শুধু কিছু... ডকুমেন্টস নিচ্ছি।' আমি কখনও এটা ভুলতে পারব না।" },
+                    { emoji: "🐶", title: "আমার কুকুর নিজেকে মানুষ ভাবে", 
+                      content: "আমার গোল্ডেন রিট্রিভার বাডি ডিনার টেবিলে আমাদের সাথে বসে। সে কাঁটাচামচ ব্যবহার করে (খারাপভাবে), টিভি দেখে (বিশেষ করে প্রাণীর বিজ্ঞাপন), এমনকি খবরের কাগজ পড়ার চেষ্টা করে (উল্টো করে)। গতকাল সে পাতার টাকা দিয়ে মুদি কেনার চেষ্টা করেছিল। আমরা চিন্তিত।" },
+                    { emoji: "🍌", title: "কলা ফোনের প্র্যাঙ্ক", 
+                      content: "আমি আমার বন্ধুকে কলা কানের কাছে ধরে ফোন করলাম। সে ধরল এবং আমি বললাম, 'হ্যালো, এই কলা বলছে।' সে ফোন কেটে দিল। আমি আবার সেই কলা ধরে ফোন করলাম। সে ধরল না। তাই আমি তাকে টেক্সট করলাম: 'দুঃখিত, আমার কলার নেটওয়ার্ক নেই।' আমরা আর বন্ধু নেই।" },
+                    { emoji: "🦷", title: "দাঁতের ডাক্তার যিনি হাসিয়েছিলেন", 
+                      content: "আমি দাঁতের ডাক্তারের কাছে গিয়েছিলাম দাঁত ব্যথা নিয়ে। তিনি বললেন, 'চিন্তা করো না, আমি তোমাকে হাসাবো।' আমি জিজ্ঞেস করলাম, 'কীভাবে?' তিনি বললেন, 'ড্রিল করার সময় তোমাকে একটা জোকস শোনাব!' তিনি এত খারাপ প্যাঁচ বললেন যে আমি হেসে ফেললাম, এবং আমার দাঁত নিজেই পড়ে গেল। মেধাবী।" },
+                    { emoji: "🚗", title: "GPS মহিলা আমার শত্রু", 
+                      content: "আমার GPS বলে, '৫০০ ফিট পর বামে ঘুরুন।' আমি সাথে সাথেই বামে ঘুরে গেলাম। সে বলে, 'পুনঃগণনা করছি।' আমি চিৎকার করি, 'তুই তো বামে ঘুরতে বললি!' সে উত্তর দেয়, '৫০০ ফিট পর বামে ঘুরুন।' আমাদের বিষাক্ত সম্পর্ক। সে সবসময় ঠিক বলে। আক্ষরিক অর্থেই।" },
+                    { emoji: "🍔", title: "বার্গার যা আমাকে কাঁদিয়েছিল", 
+                      content: "আমি ডাবল চিজবার্গার অর্ডার করলাম। এত সুন্দর ছিল যে আমি কেঁদে ফেললাম। আমার বন্ধু জিজ্ঞেস করল, 'ঠিক আছ?' আমি কাঁদতে কাঁদতে বললাম, 'এটা... এত নিখুঁত।' আমি ছবি তুললাম, ইনস্টাগ্রামে পোস্ট করলাম, তারপর ৩০ সেকেন্ডে গিলে ফেললাম। জীবনের সেরা বার্গার।" },
+                    { emoji: "🐧", title: "মলে পেঙ্গুইন", 
+                      content: "আমি মলে পেঙ্গুইন পোশাকে একজন লোক দেখলাম। তিনি বিনামূল্যে আলিঙ্গন দিচ্ছিলেন। আমি তাকে জড়িয়ে ধরলাম, এবং তিনি কর্কশ গলায় বললেন, 'তুমি আমার প্রিয় মানুষ।' আমি জিজ্ঞেস করলাম কেন। তিনি বললেন, 'কারণ তুমি আমাকে মাছ খাওয়ানোর চেষ্টা করোনি।' আমি এখনও সেই পেঙ্গুইনের কথা ভাবি।" },
+                    { emoji: "🎈", title: "বেলুন যা ফাটল না", 
+                      content: "আমি একটি পার্টি থেকে বেলুন পেয়েছিলাম। আমি এর উপর বসে ফাটানোর চেষ্টা করলাম। ফাটল না। আমি দেয়ালে ছুড়ে মারলাম। ফিরে এসে ধাক্কা দিল। এমনকি কাঁটা দিয়ে ফাটানোর চেষ্টা করলাম। কাঁটা বেঁকে গেল। সেই বেলুন এখনও বেঁচে আছে, সম্ভবত এখন কোনো ছোট দেশ শাসন করছে।" },
+                    { emoji: "🧦", title: "মোজা যা অদৃশ্য হয়ে গেল", 
+                      content: "আমি ওয়াশিং মেশিনে দুটি মোজা দিয়েছিলাম। শুধু একটা বেরোয়। আমি সব জায়গায় খুঁজলাম। তিন সপ্তাহ পরে, আমি ফ্রিজারে পেলাম। কোন ব্যাখ্যা নেই। মোজাটি এখনও আমাকে অদ্ভুতভাবে দেখে। আমার মনে হয় এটা এমন কিছু জানে যা আমি জানি না।" }
+                ]
+            },
+            es: {
+                pageTitle: "Historias Graciosas",
+                pageSubtitle: "🤣 Historias desternillantes que te harán reír hasta que te duela la barriga",
+                stories: [
+                    { emoji: "🦆", title: "El pato que pensaba que era un perro", 
+                      content: "Un patito fue criado por una familia de golden retrievers. Aprendió a ladrar, a buscar palos e incluso intentó mover la cola. Un día, vio un estanque y pensó: '¿Qué es este suelo azul mágico?' Caminó hacia él y descubrió su verdadera identidad. Ahora se identifica como 'perro-pato' y todavía ladra a los carteros." },
+                    { emoji: "🍕", title: "La pizza que cambió mi vida", 
+                      content: "Pedí una pizza en línea. Cuando llegó, el repartidor dijo: 'Esta pizza tiene un mensaje para ti.' Abrí la caja y los pepperonis decían 'ERES INCREÍBLE'. Lloré. Luego me comí el mensaje. La mejor pizza de mi vida. Todavía pienso en esa pizza todos los días." },
+                    { emoji: "🐱", title: "Gato vs. Aspiradora", 
+                      content: "Mi gato, Sir Fluffington, declaró la guerra a la aspiradora. Siseaba, se erizaba y la atacaba. Un día, la aspiradora se rompió. Sir Fluffington se sentó victorioso sobre ella durante tres días, custodiando a su enemigo caído. Compramos una nueva. La guerra continúa." },
+                    { emoji: "🚽", title: "El incidente del papel higiénico", 
+                      content: "Una vez me quedé sin papel higiénico durante una reunión de Zoom. Tuve que caminar de lado hasta el armario, agarrar un rollo nuevo y volver. Mi jefe preguntó: '¿Qué haces?' Dije: 'Solo buscando algunos... documentos.' Nunca lo olvidaré." },
+                    { emoji: "🐶", title: "Mi perro cree que es humano", 
+                      content: "Mi golden retriever, Buddy, se sienta en la mesa con nosotros. Usa un tenedor (mal), ve la tele (especialmente comerciales de animales) e incluso intenta leer el periódico (al revés). Ayer intentó pagar la compra con una hoja. Estamos preocupados." },
+                    { emoji: "🍌", title: "La broma del teléfono de plátano", 
+                      content: "Llamé a mi amigo con un plátano en la oreja. Respondió y dije: 'Hola, habla el plátano.' Colgó. Volví a llamar con el mismo plátano. No respondió. Así que le envié un mensaje: 'Lo siento, mi plátano perdió la señal.' Ya no somos amigos." },
+                    { emoji: "🦷", title: "El dentista que me hizo reír", 
+                      content: "Fui al dentista con dolor de muelas. Dijo: 'No te preocupes, te haré reír en un momento.' Pregunté: '¿Cómo?' Respondió: '¡Te contaré un chiste mientras taladro!' Me contó un juego de palabras tan malo que me reí, y mi muela se cayó sola. Genio." },
+                    { emoji: "🚗", title: "La señora del GPS es mi némesis", 
+                      content: "Mi GPS dice: 'En 500 pies, gire a la izquierda.' Giro a la izquierda inmediatamente. Ella dice: 'Recalculando.' Grito: '¡Dijiste que girara a la izquierda!' Ella responde: 'En 500 pies, gire a la izquierda.' Tenemos una relación tóxica. Siempre tiene razón. Literalmente." },
+                    { emoji: "🍔", title: "La hamburguesa que me hizo llorar", 
+                      content: "Pedí una hamburguesa doble con queso. Era tan hermosa que empecé a llorar. Mi amigo preguntó: '¿Estás bien?' Sollocé: 'Es que... es tan perfecta.' Tomé una foto, la subí a Instagram y la devoré en 30 segundos. La mejor hamburguesa de mi vida." },
+                    { emoji: "🐧", title: "El pingüino en el centro comercial", 
+                      content: "Vi a un tipo disfrazado de pingüino en el centro comercial. Daba abrazos gratis. Lo abracé y dijo con voz chillona: 'Eres mi humano favorito.' Pregunté por qué. Respondió: 'Porque no intentaste darme de comer pescado.' Todavía pienso en ese pingüino." },
+                    { emoji: "🎈", title: "El globo que no reventaba", 
+                      content: "Conseguí un globo en una fiesta. Intenté reventarlo sentándome encima. No reventó. Lo tiré contra la pared. Reboteó. Incluso intenté pincharlo con un tenedor. El tenedor se dobló. Ese globo sigue vivo, probablemente gobernando un país pequeño." },
+                    { emoji: "🧦", title: "El calcetín que desapareció", 
+                      content: "Metí dos calcetines en la lavadora. Salió uno solo. Busqué por todas partes. Tres semanas después, lo encontré en el congelador. No tengo explicación. El calcetín todavía me mira raro. Creo que sabe algo que yo no." }
+                ]
+            },
+            pt: {
+                pageTitle: "Histórias Engraçadas",
+                pageSubtitle: "🤣 Histórias hilárias que vão fazer você rir até a barriga doer!",
+                stories: [
+                    { emoji: "🦆", title: "O pato que pensava que era um cachorro", 
+                      content: "Um patinho foi criado por uma família de golden retrievers. Ele aprendeu a latir, buscar paus e até tentou abanar o rabo. Um dia, viu um lago e pensou: 'O que é este chão azul mágico?' Ele entrou na água e descobriu sua verdadeira identidade. Agora se identifica como 'cachorro-pato' e ainda late para os carteiros." },
+                    { emoji: "🍕", title: "A pizza que mudou minha vida", 
+                      content: "Pedir uma pizza online. Quando chegou, o entregador disse: 'Esta pizza tem uma mensagem para você.' Abri a caixa e os pepperonis diziam 'VOCÊ É INCRÍVEL'. Chorei. Depois comi a mensagem. A melhor pizza de todas. Ainda penso naquela pizza todos os dias." },
+                    { emoji: "🐱", title: "Gato vs. Aspirador de pó", 
+                      content: "Meu gato, Sir Fluffington, declarou guerra ao aspirador de pó. Ele sibilava, se eriçava e atacava. Um dia, o aspirador quebrou. Sir Fluffington sentou-se vitorioso em cima dele por três dias, guardando seu inimigo caído. Compramos um novo. A guerra continua." },
+                    { emoji: "🚽", title: "O incidente do papel higiênico", 
+                      content: "Uma vez fiquei sem papel higiênico durante uma reunião do Zoom. Tive que andar de lado até o armário, pegar um rolo novo e voltar. Meu chefe perguntou: 'O que você está fazendo?' Eu disse: 'Só pegando alguns... documentos.' Nunca vou superar isso." },
+                    { emoji: "🐶", title: "Meu cachorro acha que é humano", 
+                      content: "Meu golden retriever, Buddy, senta-se à mesa conosco. Ele usa garfo (mal), assiste TV (especialmente comerciais de animais) e até tenta ler o jornal (de cabeça para baixo). Ontem, tentou pagar as compras com uma folha. Estamos preocupados." },
+                    { emoji: "🍌", title: "A pegadinha do telefone de banana", 
+                      content: "Liguei para meu amigo com uma banana no ouvido. Ele atendeu e eu disse: 'Alô, aqui é a banana falando.' Ele desligou. Liguei de novo com a mesma banana. Ele não atendeu. Então mandei uma mensagem: 'Desculpe, minha banana perdeu o sinal.' Não somos mais amigos." },
+                    { emoji: "🦷", title: "O dentista que me fez rir", 
+                      content: "Fui ao dentista com dor de dente. Ele disse: 'Não se preocupe, vou fazê-lo rir em instantes.' Perguntei: 'Como?' Ele respondeu: 'Vou contar uma piada enquanto perfuro!' Ele contou um trocadilho tão ruim que ri, e meu dente caiu sozinho. Gênio." },
+                    { emoji: "🚗", title: "A senhora do GPS é minha nemesis", 
+                      content: "Meu GPS diz: 'Em 150 metros, vire à esquerda.' Eu viro à esquerda imediatamente. Ela diz: 'Recalculando.' Grito: 'Você disse para virar à esquerda!' Ela responde: 'Em 150 metros, vire à esquerda.' Temos um relacionamento tóxico. Ela sempre tem razão. Literalmente." },
+                    { emoji: "🍔", title: "O hambúrguer que me fez chorar", 
+                      content: "Pedir um hambúrguer duplo com queijo. Era tão bonito que comecei a chorar. Meu amigo perguntou: 'Você está bem?' Solucei: 'É que... é tão perfeito.' Tirei uma foto, postei no Instagram e devorei em 30 segundos. O melhor hambúrguer da minha vida." },
+                    { emoji: "🐧", title: "O pinguim no shopping", 
+                      content: "Vi um cara fantasiado de pinguim no shopping. Ele estava dando abraços grátis. Eu o abracei, e ele disse com uma voz estridente: 'Você é meu humano favorito.' Perguntei por quê. Ele respondeu: 'Porque você não tentou me dar peixe.' Ainda penso naquele pinguim." },
+                    { emoji: "🎈", title: "O balão que não estourava", 
+                      content: "Ganhei um balão numa festa. Tentei estourá-lo sentando em cima. Não estourou. Joguei contra a parede. Ele quicou. Até tentei furá-lo com um garfo. O garfo entortou. Aquele balão ainda está vivo, provavelmente governando algum país pequeno." },
+                    { emoji: "🧦", title: "A meia que desapareceu", 
+                      content: "Coloquei duas meias na máquina de lavar. Só saiu uma. Procurei em todo lugar. Três semanas depois, encontrei no congelador. Não tenho explicação. A meia ainda me olha estranho. Acho que ela sabe algo que eu não sei." }
+                ]
+            },
+            ps: {
+                pageTitle: "خندونکې کیسې",
+                pageSubtitle: "🤣 هغه کیسې چې ستاسو خندا به راولي او معدې به دروي",
+                stories: [
+                    { emoji: "🦆", title: "هغه هېلۍ چې ځان یې سپی باله", 
+                      content: "یوه کوچنۍ هېلۍ د سپیو په کور کې لویه شوه. هغه زړه کول، لرګي راوستل او لکۍ یې خوځوله. یوه ورځ یې یو حوض ولید او فکر یې وکړ: 'دا جادوګر نیلي ځمکه څه ده؟' هغه حوض ته لاړه او خپل اصلي هویت یې وموند. اوس ځان 'سپی-هېلۍ' بولي او لا هم پوستوانو ته زړه کوي." },
+                    { emoji: "🍕", title: "هغه پیزا چې زما ژوند یې بدل کړ", 
+                      content: "ما آنلاین پیزا امر کړه. کله چې راغله، د رسونې سړي وویل: 'دا پیزا ستاسو لپاره پیغام لري.' ما بکس خلاص کړ او پپرونیو جوړ کړی و 'ته ډیر ښه یې'. ما وژړل. بیا مې پیغام وخوړ. ترټولو غوره پیزا. زه لا هم هره ورځ د هغې پیزا په اړه فکر کوم." },
+                    { emoji: "🐱", title: "پیشو بمقابله ویکیوم کلینر", 
+                      content: "زما پیشو سر فلافینګټون د ویکیوم کلینر په وړاندې جګړه اعلان کړه. هغه به خیش خیش کوله، ځان به پړساوه او حمله به یې کوله. یوه ورځ ویکیوم کلینر مات شو. سر فلافینګټون د دریو ورځو لپاره په بریالیتوب سره په هغه باندې ناست و. موږ نوی واخیست. جګړه دوام لري." },
+                    { emoji: "🚽", title: "د تشناب د کاغذ پېښه", 
+                      content: "یو ځل زما د تشناب کاغذ د زوم غونډې په ترڅ کې خلاص شو. ما باید تګ راتګ کړی وای، نوی رول راوړی وای او بیرته راغلی وای. زما مشر ماته وویل: 'ته څه کوې؟' ما وویل: 'یوازې ځینې... اسناد راوړم.' زه به دا هیڅکله هیر نه کړم." },
+                    { emoji: "🐶", title: "زما سپی ځان انسان بولي", 
+                      content: "زما گولډن ریټریور بډي زموږ سره د ډوډۍ په میز کې ناست وي. هغه چنګاښ کاروي (خراب)، ټلویزیون ګوري (په ځانګړې توګه د حیواناتو اعلانونه)، او حتی هڅه کوي چې ورځپاڼه ولولي (په سر کې). پرون یې هڅه وکړه چې د یوې پاڼې سره د پلورنۍ پیسې ورکړي. موږ اندیښمن یو." },
+                    { emoji: "🍌", title: "د کیلې تلیفون ټوکه", 
+                      content: "ما خپل ملګري ته د کیلې سره تلیفون وکړ. هغه ځواب ورکړ او ما وویل: 'سلام، دا کیلې خبرې کوي.' هغه تلیفون پرې کړ. ما بیا هغه کیلې سره تلیفون وکړ. هغه ځواب ورنکړ. نو ما ورته پیغام ولیږه: 'بخښنه غواړم، زما کیلې شبکه له لاسه ورکړه.' موږ نور ملګري نه یو." },
+                    { emoji: "🦷", title: "د غاښونو ډاکټر چې ما یې وخنداوه", 
+                      content: "ما د غاښونو ډاکټر ته د غاښونو درد سره مراجعه وکړه. هغه وویل: 'اندیښنه مه کوه، زه به تاسې وخندوم.' ما وپوښتل: 'څنګه؟' هغه وویل: 'زه به تاسې ته یوه ټوکه ووایم پداسې حال کې چې زه ډرل کوم!' هغه دومره بد پنچ لاین وویل چې ما وخندل، او زما غاښ پخپله راووت. نابغه." },
+                    { emoji: "🚗", title: "د GPS میرمن زما دښمنه ده", 
+                      content: "زما GPS وايي: 'په ۵۰۰ فوټو کې چپ لور ته وګرځئ.' ما سمدلاسه چپ لور ته وګرځید. هغه وايي: 'بیا محاسبه کوم.' ما چیغه کړه: 'ته وویل چې چپ ته وګرځه!' هغه ځواب ورکوي: 'په ۵۰۰ فوټو کې چپ لور ته وګرځئ.' موږ زهرجنې اړیکې لرو. هغه تل سمه وايي. په لفظي معنی." },
+                    { emoji: "🍔", title: "هغه برګر چې ما یې ژړول", 
+                      content: "ما ډبل چیزبرګر امر کړ. دومره ښکلی و چې ما وژړل. زما ملګري ماته وویل: 'ته سم یې؟' ما په ژړا سره وویل: 'دا... دومره کامل دی.' ما عکس واخیست، انسټاګرام کې یې کېښود، او بیا مې په ۳۰ ثانیو کې وخورل. د ژوند غوره برګر." },
+                    { emoji: "🐧", title: "د مال پینگوین", 
+                      content: "ما په مال کې یو سړی د پینگوین په جامو کې ولید. هغه وړیا غیږې ورکولې. ما هغه غیږ کې ونیو، او هغه په نرم غږ وویل: 'ته زما غوره انسان یې.' ما وپوښتل ولې. هغه وویل: 'ځکه چې تا هڅه ونه کړه چې ما ته کب راکړي.' زه لا هم د هغه پینگوین په اړه فکر کوم." },
+                    { emoji: "🎈", title: "هغه بیلون چې نه و چاودید", 
+                      content: "ما د یوې جشن څخه بیلون ترلاسه کړ. ما هڅه وکړه چې په هغه باندې ناست شم او چاودنه یې کړم. نه و چاودید. ما دېوال ته وغورځاوه. بیرته راستون شو. حتی ما هڅه وکړه چې د چنګاښ سره یې سور کړم. چنګاښ وڅړید. هغه بیلون لاهم ژوندی دی، ممکن اوس یو کوچنی هیواد اداره کوي." },
+                    { emoji: "🧦", title: "هغه جراب چې ورک شو", 
+                      content: "ما د مینځلو ماشین کې دوه جرابې واچولې. یوازې یوه راووتله. ما هرځای ولیدل. درې اوونۍ وروسته، ما هغه په فریزر کې وموندله. هیڅ تفسیر نلرم. جرابه لا هم ما ته عجیب ګوري. زما په اند هغه یو څه پوهیږي چې زه نه پوهیږم." }
+                ]
+            }
         };
 
-        // ============================================
-        // CREATE FLOATING ELEMENTS
-        // ============================================
-        function createFloatingElements() {
-            // Create floating emojis
-            const emojis = ['😂', '🤣', '🥰', '😍', '😊', '😎', '🤩', '🥳'];
-            for (let i = 0; i < 15; i++) {
-                const emoji = document.createElement('div');
-                emoji.className = 'emoji';
-                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                emoji.style.left = Math.random() * 100 + '%';
-                emoji.style.top = Math.random() * 100 + '%';
-                emoji.style.animationDelay = Math.random() * 5 + 's';
-                emoji.style.fontSize = (Math.random() * 2 + 1.5) + 'rem';
-                document.body.appendChild(emoji);
+        /**
+         * SOUND & CONFETTI
+         */
+        class SoundFX {
+            constructor() {
+                this.ctx = null;
             }
-
-            // Create balloons
-            const balloonColors = ['#ff6b9d', '#c44569', '#f8b500', '#ff6348', '#2ed573', '#1e90ff'];
-            for (let i = 0; i < 8; i++) {
-                const balloon = document.createElement('div');
-                balloon.className = 'balloon';
-                balloon.style.left = Math.random() * 100 + '%';
-                balloon.style.top = Math.random() * 100 + '%';
-                balloon.style.background = `radial-gradient(circle at 30% 30%, ${balloonColors[Math.floor(Math.random() * balloonColors.length)]}, transparent)`;
-                balloon.style.animationDelay = Math.random() * 8 + 's';
-                document.body.appendChild(balloon);
-            }
-
-            // Create stars
-            for (let i = 0; i < 30; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 3 + 's';
-                document.body.appendChild(star);
-            }
-
-            // Create sparkles
-            for (let i = 0; i < 20; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.style.left = Math.random() * 100 + '%';
-                sparkle.style.top = Math.random() * 100 + '%';
-                sparkle.style.animationDelay = Math.random() * 2 + 's';
-                document.body.appendChild(sparkle);
-            }
-
-            // Create clouds
-            for (let i = 0; i < 5; i++) {
-                const cloud = document.createElement('div');
-                cloud.className = 'cloud';
-                cloud.style.width = (Math.random() * 150 + 100) + 'px';
-                cloud.style.height = (Math.random() * 60 + 40) + 'px';
-                cloud.style.top = Math.random() * 50 + '%';
-                cloud.style.animationDuration = (Math.random() * 15 + 15) + 's';
-                cloud.style.animationDelay = Math.random() * 10 + 's';
-                document.body.appendChild(cloud);
-            }
-
-            // Create floating hearts
-            for (let i = 0; i < 10; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'heart';
-                heart.textContent = '❤️';
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.top = Math.random() * 100 + '%';
-                heart.style.animationDelay = Math.random() * 4 + 's';
-                document.body.appendChild(heart);
-            }
-        }
-
-        // ============================================
-        // DISPLAY STORY
-        // ============================================
-        function displayStory(index) {
-            const storyCard = document.getElementById('storyCard');
-            const storyTitle = document.getElementById('storyTitle');
-            const storyContent = document.getElementById('storyContent');
-            
-            // Fade out
-            storyCard.style.opacity = '0';
-            storyCard.style.transform = 'scale(0.95)';
-            
-            setTimeout(() => {
-                storyTitle.textContent = stories[index].title;
-                storyContent.textContent = stories[index].content;
-                
-                // Fade in
-                storyCard.style.opacity = '1';
-                storyCard.style.transform = 'scale(1)';
-                
-                // Update stats
-                document.getElementById('storyNumber').textContent = index + 1;
-                smileCount++;
-                updateStats();
-                updateHappyLevel();
-                
-                // Play pop sound
-                playPopSound();
-                
-                // Change quote randomly
-                if (Math.random() > 0.5) {
-                    changeQuote();
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) this.ctx = new AudioContext();
                 }
-                
-                // Check for confetti
-                if (smileCount % 5 === 0) {
-                    triggerConfetti();
-                }
-                
-                // Check Easter egg
-                if (nextStoryClicks >= 10) {
-                    showEasterEgg();
-                }
-            }, 300);
-        }
-
-        // ============================================
-        // BUTTON FUNCTIONS
-        // ============================================
-        function nextStory() {
-            nextStoryClicks++;
-            currentStoryIndex = (currentStoryIndex + 1) % stories.length;
-            displayStory(currentStoryIndex);
-        }
-
-        function randomStory() {
-            let newIndex;
-            do {
-                newIndex = Math.floor(Math.random() * stories.length);
-            } while (newIndex === currentStoryIndex);
-            
-            currentStoryIndex = newIndex;
-            displayStory(currentStoryIndex);
-        }
-
-        function addToFavorites() {
-            if (!favorites.includes(currentStoryIndex)) {
-                favorites.push(currentStoryIndex);
-                favoritesCount++;
-                updateStats();
-                
-                // Visual feedback
-                const btn = event.target;
-                btn.style.transform = 'scale(1.2)';
-                setTimeout(() => {
-                    btn.style.transform = 'scale(1)';
-                }, 200);
-                
-                // Emoji explosion
-                createEmojiExplosion(event.clientX, event.clientY);
             }
-        }
-
-        function surpriseMe() {
-            // Random story + special effects
-            randomStory();
-            
-            // Extra confetti
-            triggerConfetti();
-            setTimeout(triggerConfetti, 500);
-            
-            // Emoji explosion at center
-            createEmojiExplosion(window.innerWidth / 2, window.innerHeight / 2);
-            
-            // Special message
-            const messages = [
-                "🎉 Surprise! Here's a special story just for you!",
-                "✨ You're amazing! Enjoy this tale!",
-                "🌟 Lucky you! This story is extra funny!",
-                "💫 Magic story incoming!"
-            ];
-            
-            alert(messages[Math.floor(Math.random() * messages.length)]);
-        }
-
-        // ============================================
-        // UPDATE STATS
-        // ============================================
-        function updateStats() {
-            document.getElementById('smileCounter').textContent = smileCount;
-            document.getElementById('favoritesCount').textContent = favoritesCount;
-        }
-
-        function updateHappyLevel() {
-            const level = Math.min((smileCount / 20) * 100, 100);
-            const progressBar = document.getElementById('happyLevel');
-            progressBar.style.width = level + '%';
-            progressBar.textContent = Math.floor(level) + '% Happy';
-        }
-
-        // ============================================
-        // CHANGE QUOTE
-        // ============================================
-        function changeQuote() {
-            const quoteBox = document.getElementById('quoteBox');
-            quoteBox.style.opacity = '0';
-            
-            setTimeout(() => {
-                quoteBox.textContent = '"' + quotes[Math.floor(Math.random() * quotes.length)] + '"';
-                quoteBox.style.opacity = '1';
-            }, 300);
-        }
-
-        // ============================================
-        // CONFETTI ANIMATION
-        // ============================================
-        function triggerConfetti() {
-            const canvas = document.getElementById('confetti-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            const particles = [];
-            const colors = ['#ff6b9d', '#c44569', '#f8b500', '#ff6348', '#2ed573', '#1e90ff', '#3742fa'];
-            
-            for (let i = 0; i < 100; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: -10,
-                    vx: (Math.random() - 0.5) * 4,
-                    vy: Math.random() * 3 + 2,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    size: Math.random() * 8 + 4,
-                    rotation: Math.random() * 360
+            playBoing() {
+                this.init();
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.type = 'sine';
+                const now = this.ctx.currentTime;
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.exponentialRampToValueAtTime(600, now + 0.15);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.3);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                osc.start(now);
+                osc.stop(now + 0.35);
+            }
+            playCheer() {
+                this.init();
+                if (!this.ctx) return;
+                [440, 554.37, 659.25, 880].forEach((freq, i) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.type = 'triangle';
+                    const now = this.ctx.currentTime + (i * 0.08);
+                    osc.frequency.setValueAtTime(freq, now);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
                 });
             }
-            
-            let frame = 0;
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                particles.forEach(p => {
+        }
+
+        class ConfettiEngine {
+            constructor(canvasId) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.animationId = null;
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+            }
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            burst(x = window.innerWidth / 2, y = window.innerHeight / 2) {
+                const colors = ['#FFD200', '#FF3366', '#00E676', '#00C2FF', '#8A2387', '#FF5E36'];
+                for (let i = 0; i < 40; i++) {
+                    this.particles.push({
+                        x: x + (Math.random() - 0.5) * 40,
+                        y: y + (Math.random() - 0.5) * 40,
+                        size: Math.random() * 8 + 6,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        vx: (Math.random() - 0.5) * 16,
+                        vy: (Math.random() - 0.7) * 16,
+                        gravity: 0.45,
+                        rotation: Math.random() * 360,
+                        rotSpeed: (Math.random() - 0.5) * 12,
+                        life: 1
+                    });
+                }
+                if (!this.animationId) this.animate();
+            }
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    const p = this.particles[i];
                     p.x += p.vx;
                     p.y += p.vy;
-                    p.rotation += 5;
-                    
-                    ctx.save();
-                    ctx.translate(p.x, p.y);
-                    ctx.rotate(p.rotation * Math.PI / 180);
-                    ctx.fillStyle = p.color;
-                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
-                    ctx.restore();
-                });
-                
-                frame++;
-                if (frame < 150) {
-                    requestAnimationFrame(animate);
+                    p.vy += p.gravity;
+                    p.rotation += p.rotSpeed;
+                    p.life -= 0.015;
+                    if (p.life <= 0) {
+                        this.particles.splice(i, 1);
+                        continue;
+                    }
+                    this.ctx.save();
+                    this.ctx.translate(p.x, p.y);
+                    this.ctx.rotate((p.rotation * Math.PI) / 180);
+                    this.ctx.fillStyle = p.color;
+                    this.ctx.globalAlpha = p.life;
+                    this.ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                    this.ctx.restore();
+                }
+                if (this.particles.length > 0) {
+                    this.animationId = requestAnimationFrame(() => this.animate());
                 } else {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    this.animationId = null;
                 }
             }
-            
-            animate();
         }
 
-        // ============================================
-        // EMOJI EXPLOSION
-        // ============================================
-        function createEmojiExplosion(x, y) {
-            const emojis = ['😂', '🤣', '🥰', '😍', '😊', '😎', '🤩', '🥳', '❤️', '✨'];
-            
-            for (let i = 0; i < 15; i++) {
-                const emoji = document.createElement('div');
-                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                emoji.style.position = 'fixed';
-                emoji.style.left = x + 'px';
-                emoji.style.top = y + 'px';
-                emoji.style.fontSize = '2rem';
-                emoji.style.pointerEvents = 'none';
-                emoji.style.zIndex = '1000';
-                emoji.style.transition = 'all 1s ease-out';
-                document.body.appendChild(emoji);
-                
-                setTimeout(() => {
-                    emoji.style.left = (x + (Math.random() - 0.5) * 200) + 'px';
-                    emoji.style.top = (y + (Math.random() - 0.5) * 200) + 'px';
-                    emoji.style.opacity = '0';
-                    emoji.style.transform = 'scale(0)';
-                }, 50);
-                
-                setTimeout(() => {
-                    emoji.remove();
-                }, 1000);
-            }
-        }
+        /**
+         * MAIN APP
+         */
+        const LaughZoneApp = (() => {
+            let currentLang = 'en';
+            let soundFx, confetti;
 
-        // ============================================
-        // EASTER EGG
-        // ============================================
-        function showEasterEgg() {
-            const easterEgg = document.getElementById('easterEgg');
-            easterEgg.classList.add('show');
-            
-            setTimeout(() => {
-                easterEgg.classList.remove('show');
-            }, 4000);
-        }
+            function init() {
+                soundFx = new SoundFX();
+                confetti = new ConfettiEngine('confetti-canvas');
 
-        // ============================================
-        // MOUSE SPARKLE TRAIL
-        // ============================================
-        function startMouseSparkle() {
-            document.addEventListener('mousemove', (e) => {
-                if (Math.random() > 0.7) {
-                    const sparkle = document.createElement('div');
-                    sparkle.className = 'mouse-sparkle';
-                    sparkle.style.left = e.clientX + 'px';
-                    sparkle.style.top = e.clientY + 'px';
-                    document.body.appendChild(sparkle);
-                    
-                    setTimeout(() => {
-                        sparkle.remove();
-                    }, 800);
+                const langDropdown = document.getElementById('languageSelect');
+                langDropdown.addEventListener('change', (e) => {
+                    setLanguage(e.target.value);
+                });
+
+                // Check URL hash for language
+                const hash = window.location.hash;
+                if (hash) {
+                    const langMap = { '#en': 'en', '#bn': 'bn', '#es': 'es', '#pt': 'pt', '#ps': 'ps' };
+                    if (langMap[hash]) {
+                        langDropdown.value = langMap[hash];
+                        setLanguage(langMap[hash]);
+                    }
                 }
-            });
-        }
 
-        // ============================================
-        // POP SOUND (Using Web Audio API)
-        // ============================================
-        function playPopSound() {
-            try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.frequency.value = 800;
-                oscillator.type = 'sine';
-                
-                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-                
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.1);
-            } catch (e) {
-                // Silently fail if audio not supported
+                renderStories('en');
             }
-        }
 
-        // ============================================
-        // HANDLE WINDOW RESIZE
-        // ============================================
-        window.addEventListener('resize', () => {
-            const canvas = document.getElementById('confetti-canvas');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
+            function setLanguage(langCode) {
+                if (!TRANSLATIONS[langCode]) return;
+                currentLang = langCode;
+
+                if (langCode === 'ps') {
+                    document.documentElement.setAttribute('dir', 'rtl');
+                } else {
+                    document.documentElement.setAttribute('dir', 'ltr');
+                }
+
+                renderStories(langCode);
+                soundFx.playBoing();
+                confetti.burst(window.innerWidth - 100, 60);
+            }
+
+            function renderStories(langCode) {
+                const data = TRANSLATIONS[langCode];
+                if (!data) return;
+
+                document.getElementById('pageTitle').textContent = data.pageTitle;
+                document.getElementById('pageSubtitle').textContent = data.pageSubtitle;
+
+                const container = document.getElementById('storiesContainer');
+                container.innerHTML = '';
+
+                data.stories.forEach((story, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'story-card clickable';
+                    card.innerHTML = `
+                        <span class="story-number">#${index + 1}</span>
+                        <div class="story-emoji">${story.emoji}</div>
+                        <h3 class="story-title">${story.title}</h3>
+                        <p class="story-content">${story.content}</p>
+                        <span class="story-tag">😂 ${['Silly', 'Wacky', 'Epic', 'Classic', 'Crazy', 'Funny'][index % 6]}</span>
+                    `;
+                    card.addEventListener('click', () => {
+                        soundFx.playBoing();
+                        confetti.burst(
+                            window.innerWidth / 2 + (Math.random() - 0.5) * 100,
+                            window.innerHeight / 2 + (Math.random() - 0.5) * 100
+                        );
+                    });
+                    container.appendChild(card);
+                });
+            }
+
+            function triggerCheer() {
+                soundFx.playCheer();
+                confetti.burst(100, 100);
+                confetti.burst(window.innerWidth - 100, 100);
+                confetti.burst(window.innerWidth / 2, 60);
+            }
+
+            function goBack() {
+                soundFx.playBoing();
+                confetti.burst(window.innerWidth / 2, window.innerHeight / 2);
+                // Navigate back to main page
+                window.location.href = 'index.html';
+            }
+
+            return { init, setLanguage, triggerCheer, goBack };
+        })();
+
+        // Make functions globally accessible for inline onclick
+        function triggerCheer() { LaughZoneApp.triggerCheer(); }
+        function goBack() { LaughZoneApp.goBack(); }
+
+        document.addEventListener('DOMContentLoaded', LaughZoneApp.init);
     </script>
 </body>
-</html>'''
-
+</html>
